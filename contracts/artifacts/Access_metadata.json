@@ -331,11 +331,11 @@
 			]
 		},
 		"contracts/Access.sol": {
-			"keccak256": "0x4a32c06183796ee3522da9d233e056ed61a51aed2dd08d4609dd411d5bc7ade2",
+			"keccak256": "0xbc1036e4891116e358ad65957c4e65df8a181cfeb9343f57783c8c2aa8453e22",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4edbad5b39fe4e69f1c0b41e0d090dd99b51278736fbd52cf19531dd6ff87064",
-				"dweb:/ipfs/QmaknBK8rmQiPmwzs7uniLWzGFrfAbmEfgJ7TspUUYJjgc"
+				"bzz-raw://61538253d55d90565a236ba610a4a184baa663e7c76c8857090c56528bf7092f",
+				"dweb:/ipfs/QmeyX2m3pFgsn6XUmmn8zfJKLPYJ7wm4Lqw64feK4AcsYE"
 			]
 		},
 		"contracts/utils/AccessControl.sol": {

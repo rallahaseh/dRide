@@ -7,7 +7,7 @@ abstract contract Access is AccessControl {
 
     bytes32 public constant OWNER_ROLE = "OWNER";
     bytes32 public constant RENTER_ROLE = "RENTER";
-    
+
     // @dev Restricted to members of the owner role.
     modifier onlyOwner() {
         require(isOwner(msg.sender), "Restricted to owners.");

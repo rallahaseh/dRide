@@ -67,7 +67,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"tests/AccessControl_test.sol": "testSuite"
+			"tests/Access_test.sol": "testSuite"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -95,6 +95,14 @@
 			"urls": [
 				"bzz-raw://d4831d777a29ebdf9f2caecd70e74b97bff1b70e53622fd0a02aed01e21c8271",
 				"dweb:/ipfs/QmUqurVVnCc7XkMxb2k23TVQUtuhHZduJ3hTZarTJrqU24"
+			]
+		},
+		"contracts/Access.sol": {
+			"keccak256": "0xfb44c2bb3ab5639ad07e1f722059e1d31078498342d16e139a40e4790ebd6aac",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://601231b5d1c909eba8c5adf2dfd257c7c4a84314bfd85373e5475278d435004d",
+				"dweb:/ipfs/QmfWYLwHzxzkvUg9NLinYCSdgoca8nZC7aCNgUF2SjwXvi"
 			]
 		},
 		"contracts/utils/AccessControl.sol": {
@@ -129,12 +137,12 @@
 				"dweb:/ipfs/QmdkW1tT5iadBvaHMCoskhDGZKnfdg8o1D9CcoQYtdJet7"
 			]
 		},
-		"tests/AccessControl_test.sol": {
-			"keccak256": "0x20f46a3e81a14f245285370f3ee1da69aa97516368bf3216b2d56073b4461f73",
+		"tests/Access_test.sol": {
+			"keccak256": "0xd3a602e3db7375276caed73f7cc24fdf17e25c5a4e5e042b204de466c6e6ecd0",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://67cc6ff314b64b712c6c9a059ed7dad5a14561f2594f62267e7b44dba6ef7ed3",
-				"dweb:/ipfs/QmWJdUhLGHBUMrbkNRfsKwCSsbM9bhAycAAVed6JEqA2Gc"
+				"bzz-raw://da27aa5d935bc6109afa6faffe71d2e4cc8125a557da34a736e088c1244dd327",
+				"dweb:/ipfs/Qmbhbthbn451qKUBJqPLBnA87Ax9FPazCWoWKViuDD24Je"
 			]
 		}
 	},
