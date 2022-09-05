@@ -1,0 +1,359 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					}
+				],
+				"name": "RoleGranted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					}
+				],
+				"name": "RoleRevoked",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "OWNER_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "RENTER_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "addOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "addRenter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "getRoleMember",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					}
+				],
+				"name": "getRoleMemberCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "hasRole",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "isOwner",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "isRenter",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "removeOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "removeRenter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "renounceRenter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"addOwner(address)": {
+					"details": "Add an account to the owner role. Restricted to proposals."
+				},
+				"addRenter(address)": {
+					"details": "Add an account to the renter role. Restricted to proposals."
+				},
+				"getRoleMember(bytes32,uint256)": {
+					"details": "This function will return one of the accounts that contain the 'role' attribute.  The value of the 'index' variable must be between 0 and getRoleMemberCount, excluding both numbers. There is no specific order to the people who hold roles, and the sequence in  which they appear might shift at any time. WARNING:  You need to make sure that all of your queries are performed on the same block  when you are using {getRoleMember} and {getRoleMemberCount}. For more information, take a look at the following: https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]"
+				},
+				"getRoleMemberCount(bytes32)": {
+					"details": "This function returns the total number of accounts that contain the 'role' attribute. It is possible to enumerate all bearers of a role by using this method in conjunction with  the getRoleMember method."
+				},
+				"hasRole(bytes32,address)": {
+					"details": "Returns `true` if `account` has been granted `role`."
+				},
+				"isOwner(address)": {
+					"details": "Return `true` if the account belongs to the owner role."
+				},
+				"isRenter(address)": {
+					"details": "Return `true` if the account belongs to the renter role."
+				},
+				"removeOwner(address)": {
+					"details": "Remove an account from the owner role. Restricted to proposals."
+				},
+				"removeRenter(address)": {
+					"details": "Remove an account from the renter role. Restricted to proposals."
+				},
+				"renounceOwner()": {
+					"details": "Remove oneself from the leader role."
+				},
+				"renounceRenter()": {
+					"details": "Remove oneself from the renter role."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Access.sol": "Access"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/structs/EnumerableMap.sol": {
+			"keccak256": "0x1b8ac5ffdb80c20c9188267455197d9dcfeef46379aeb1b3a6cc622e879895ad",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5e531d0792e4774e2edabb34a5bed8e96ac80a84e08ebd5ebf7a0d15185e4f37",
+				"dweb:/ipfs/QmPwWjhL1phGiGfP5R8Kzp3bQuVigkornTcSy9KaQnou1E"
+			]
+		},
+		"@openzeppelin/contracts/utils/structs/EnumerableSet.sol": {
+			"keccak256": "0x5050943b32b6a8f282573d166b2e9d87ab7eb4dbba4ab6acf36ecb54fe6995e4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d4831d777a29ebdf9f2caecd70e74b97bff1b70e53622fd0a02aed01e21c8271",
+				"dweb:/ipfs/QmUqurVVnCc7XkMxb2k23TVQUtuhHZduJ3hTZarTJrqU24"
+			]
+		},
+		"contracts/Access.sol": {
+			"keccak256": "0x4a32c06183796ee3522da9d233e056ed61a51aed2dd08d4609dd411d5bc7ade2",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4edbad5b39fe4e69f1c0b41e0d090dd99b51278736fbd52cf19531dd6ff87064",
+				"dweb:/ipfs/QmaknBK8rmQiPmwzs7uniLWzGFrfAbmEfgJ7TspUUYJjgc"
+			]
+		},
+		"contracts/utils/AccessControl.sol": {
+			"keccak256": "0xa5893ba9c0f2af8da3f1e7f03a84a1165e864becac46b8e9b74aaaa550b82be6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://32bc73a084c521c25ccf07f451dcbc6aa9707b59cd7dff7164afaab6aa53a1f0",
+				"dweb:/ipfs/QmWGveVucaET9QgFJYnKUU2irhBNpNdrJ82v66fcgAkSKi"
+			]
+		},
+		"contracts/utils/Context.sol": {
+			"keccak256": "0x51faf7c505ab0e60ff53dd336f550d8487b7d7c112b8d07cd1051ae4d3a6a3aa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://dfd86c7bf611ca2a1243cb6a1ab668113d11b3b012228dd228a803da0fc779e7",
+				"dweb:/ipfs/QmYTmQNsMBRQbMBgmfbFWf3Ve4aXmYqjSWDjkjvSLeHr6t"
+			]
+		}
+	},
+	"version": 1
+}
