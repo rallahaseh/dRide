@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"notice": "This contract is only necessary for contracts that are intermediate in form, such as libraries.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Context.sol": "Context"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Context.sol": {
+			"keccak256": "0x51faf7c505ab0e60ff53dd336f550d8487b7d7c112b8d07cd1051ae4d3a6a3aa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://dfd86c7bf611ca2a1243cb6a1ab668113d11b3b012228dd228a803da0fc779e7",
+				"dweb:/ipfs/QmYTmQNsMBRQbMBgmfbFWf3Ve4aXmYqjSWDjkjvSLeHr6t"
+			]
+		}
+	},
+	"version": 1
+}
