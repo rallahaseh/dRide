@@ -20,7 +20,7 @@ abstract contract Access is AccessControl {
         _;
     }
 
-        /// @dev Return `true` if the account belongs to the owner role.
+    /// @dev Return `true` if the account belongs to the owner role.
     function isOwner(address account) public virtual view returns (bool) {
         return hasRole(OWNER_ROLE, account);
     }

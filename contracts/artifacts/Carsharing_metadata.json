@@ -1,0 +1,226 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "brand",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "model",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Carsharing.CarType",
+						"name": "_type",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "_image",
+						"type": "string"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "latitude",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "longitude",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Carsharing.Coordinate",
+						"name": "location",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rentCost",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "securityDeposit",
+						"type": "uint256"
+					}
+				],
+				"name": "addCar",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					}
+				],
+				"name": "agreementCompleted",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "carsCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "contractsCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					}
+				],
+				"name": "payRent",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "daysCount",
+						"type": "uint256"
+					}
+				],
+				"name": "signContract",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Rental.sol": "Carsharing"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/utils/structs/EnumerableMap.sol": {
+			"keccak256": "0x1b8ac5ffdb80c20c9188267455197d9dcfeef46379aeb1b3a6cc622e879895ad",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://5e531d0792e4774e2edabb34a5bed8e96ac80a84e08ebd5ebf7a0d15185e4f37",
+				"dweb:/ipfs/QmPwWjhL1phGiGfP5R8Kzp3bQuVigkornTcSy9KaQnou1E"
+			]
+		},
+		"@openzeppelin/contracts/utils/structs/EnumerableSet.sol": {
+			"keccak256": "0x5050943b32b6a8f282573d166b2e9d87ab7eb4dbba4ab6acf36ecb54fe6995e4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d4831d777a29ebdf9f2caecd70e74b97bff1b70e53622fd0a02aed01e21c8271",
+				"dweb:/ipfs/QmUqurVVnCc7XkMxb2k23TVQUtuhHZduJ3hTZarTJrqU24"
+			]
+		},
+		"contracts/Access.sol": {
+			"keccak256": "0x45d905cc4fe4e11043e3d93a18c2dd1b0528e506c6284b1fe989b5a32d09d9ae",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://475e26a45c39f2e0b006159fbbdb889beed33b4c7634e6cc7c55dcb608f2f90c",
+				"dweb:/ipfs/QmS2m1SCPBURRY1xPphVN1pgbGFL4zWwNWC8RSnQM5X54e"
+			]
+		},
+		"contracts/Rental.sol": {
+			"keccak256": "0x980562b5a54c55ff5cfe9b6477cd0148bbd2c63df01cf93bc93e751ff8fd8bc4",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://53b25d791f54503688d70215eee460fdf2397c10ab415d7b13c21de987113bce",
+				"dweb:/ipfs/Qmek1K1Bk8e2aBRaZqUxXJXnRi2uxoVdPK3MGWpbxUQVDn"
+			]
+		},
+		"contracts/utils/AccessControl.sol": {
+			"keccak256": "0xa5893ba9c0f2af8da3f1e7f03a84a1165e864becac46b8e9b74aaaa550b82be6",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://32bc73a084c521c25ccf07f451dcbc6aa9707b59cd7dff7164afaab6aa53a1f0",
+				"dweb:/ipfs/QmWGveVucaET9QgFJYnKUU2irhBNpNdrJ82v66fcgAkSKi"
+			]
+		},
+		"contracts/utils/Context.sol": {
+			"keccak256": "0x51faf7c505ab0e60ff53dd336f550d8487b7d7c112b8d07cd1051ae4d3a6a3aa",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://dfd86c7bf611ca2a1243cb6a1ab668113d11b3b012228dd228a803da0fc779e7",
+				"dweb:/ipfs/QmYTmQNsMBRQbMBgmfbFWf3Ve4aXmYqjSWDjkjvSLeHr6t"
+			]
+		}
+	},
+	"version": 1
+}
