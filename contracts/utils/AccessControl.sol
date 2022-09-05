@@ -8,7 +8,7 @@ pragma solidity 0.8.7;
  */
 import "@openzeppelin/contracts/utils/structs/EnumerableMap.sol";
 
-import "./utils/Context.sol";
+import "./Context.sol";
 
 /**
  * @dev Contract for controlling access, with no built-in hierarchy and
