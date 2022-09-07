@@ -101,13 +101,13 @@ contract Rental is Access {
     /// @dev The following will check whether the renter has enough ETH in the wallet to pay the rent
     modifier enoughBalanceForConfirmation(uint id) {
         uint totalAmount = getContractByID[id].insuranceDeposit + getContractByID[id].totalCost;
-        require(msg.value >= totalAmount, "Could not proceed because there is not enough ETH in your wallet");
+        require(sender.balance >= totalAmount, "Could not proceed because there is not enough ETH in your wallet");
         _;
     }
 
     modifier enoughBalanceForCompletion(uint id) {
         uint totalAmount = getContractByID[id].insuranceDeposit;
-        require(msg.value >= totalAmount, "Could not proceed because there is not enough ETH in your wallet");
+        require(address(this).balance >= totalAmount, "Could not proceed because there is not enough ETH in your wallet");
         _;
     }
 
@@ -195,7 +195,7 @@ contract Rental is Access {
      *  It will include the payment process also.
      *
      * Modifiers:
-     *  - Restricted to members of the owner role.
+     *  - Restricted to members of the renter role.
      *  - The selected vehicle should exist.
      *  - The selected vehicle should be available.
      *  - The selected contract should exist.
@@ -203,7 +203,7 @@ contract Rental is Access {
      */
     function confirmation(uint contractId, uint carId) 
         public payable
-        onlyOwner vehicleExsists(carId) isVehicleAvailable(carId) contractExsists(contractId) enoughBalanceForConfirmation(contractId)
+        onlyRenter vehicleExsists(carId) isVehicleAvailable(carId) contractExsists(contractId) enoughBalanceForConfirmation(contractId)
         returns (bool success)
     {
         // Update statuses
@@ -211,9 +211,7 @@ contract Rental is Access {
         getVehicleByID[carId].status = VehicleStatus.Hired;
         // Payment process
         uint totalAmount = getContractByID[contractId].totalCost + getContractByID[contractId].insuranceDeposit;
-        // TODO: - Add payment process
-        // address payable billingAccount = payable(msg.sender);
-        // billingAccount.transfer(totalAmount);
+        this.paymentProcess(totalAmount);
 
         return contracts.length == contractCount;
     }
@@ -237,10 +235,15 @@ contract Rental is Access {
         getVehicleByID[carId].status = VehicleStatus.Available;
         // Payment process
         uint insuranceDeposit = getContractByID[contractId].insuranceDeposit;
-        // TODO: - Add payment process
-        // address payable billingAccount = payable(msg.sender);
-        // billingAccount.transfer(insuranceDeposit);
-
+        address payable recipient = payable(msg.sender);
+        (bool sent, ) = recipient.call{value: insuranceDeposit}("");
+        require(sent, "Failed to send Ether");
+        
         return contracts.length == contractCount;
     }
+
+    /** 
+     * @dev The following function will be used to send ETH from wallet to smart contract.
+     */
+    function paymentProcess(uint256) public payable {}
 }

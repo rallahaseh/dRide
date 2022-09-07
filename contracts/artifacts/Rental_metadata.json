@@ -723,6 +723,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "paymentProcess",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "account",
 						"type": "address"
@@ -867,7 +880,7 @@
 					"details": "The following function will be used to complete the ride and return insurrance money. Modifiers:  - Restricted to members of the renter role.  - The selected vehicle should exist.  - The selected contract should exist.  - The balance of ETH in the billing account wallet should be sufficient."
 				},
 				"confirmation(uint256,uint256)": {
-					"details": "The following function will be used for the selected vehicle and its options (sign contract).  It will include the payment process also. Modifiers:  - Restricted to members of the owner role.  - The selected vehicle should exist.  - The selected vehicle should be available.  - The selected contract should exist.  - The balance of ETH in the billing account wallet should be sufficient."
+					"details": "The following function will be used for the selected vehicle and its options (sign contract).  It will include the payment process also. Modifiers:  - Restricted to members of the renter role.  - The selected vehicle should exist.  - The selected vehicle should be available.  - The selected contract should exist.  - The balance of ETH in the billing account wallet should be sufficient."
 				},
 				"getRoleMember(bytes32,uint256)": {
 					"details": "This function will return one of the accounts that contain the 'role' attribute.  The value of the 'index' variable must be between 0 and getRoleMemberCount, excluding both numbers. There is no specific order to the people who hold roles, and the sequence in  which they appear might shift at any time. WARNING:  You need to make sure that all of your queries are performed on the same block  when you are using {getRoleMember} and {getRoleMemberCount}. For more information, take a look at the following: https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]"
@@ -883,6 +896,9 @@
 				},
 				"isRenter(address)": {
 					"details": "Return `true` if the account belongs to the renter role."
+				},
+				"paymentProcess(uint256)": {
+					"details": "The following function will be used to send ETH from wallet to smart contract."
 				},
 				"removeOwner(address)": {
 					"details": "Remove an account from the owner role. Restricted to proposals."
@@ -950,11 +966,11 @@
 			]
 		},
 		"contracts/Rental.sol": {
-			"keccak256": "0xe27df7c94895aa3c7aee76270c4c736f1f2a7c849ebf1f6ad04e56dbbddc15db",
+			"keccak256": "0x632969cf86b4b79b0e16dfce822d79732b2050e245eb2618134316de7aea4feb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a9113b957bbc419108d3096ca0780286386e1647404829c2640c77d2d3450577",
-				"dweb:/ipfs/QmQogWb2SmEo9F2ZuM7optNAbdT6ewp6zV5bfarjoZScCm"
+				"bzz-raw://170c72de1aa85174c906aa5944583bd4ae041fc6f2a05658968e0aa5441b5288",
+				"dweb:/ipfs/QmUW4uyPsrGRRZiF97E75MGemUwNBPQ5mh9iH6Xn1HRusr"
 			]
 		},
 		"contracts/utils/AccessControl.sol": {
