@@ -89,50 +89,13 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes32",
-						"name": "name",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "brand",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "enum Rental.CarType",
-						"name": "carType",
-						"type": "uint8"
-					},
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "latitude",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "longitude",
-								"type": "string"
-							}
-						],
-						"internalType": "struct Rental.Coordinate",
-						"name": "location",
-						"type": "tuple"
-					},
-					{
 						"internalType": "uint256",
-						"name": "model",
+						"name": "carId",
 						"type": "uint256"
 					},
 					{
-						"internalType": "bytes32",
-						"name": "image",
-						"type": "bytes32"
-					},
-					{
 						"internalType": "uint256",
-						"name": "rentCost",
+						"name": "contractId",
 						"type": "uint256"
 					},
 					{
@@ -141,7 +104,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "addCar",
+				"name": "addInsurancePackage",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -168,6 +131,47 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "from",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "to",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct Rental.Period",
+						"name": "period",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dayscount",
+						"type": "uint256"
+					}
+				],
+				"name": "addRentPeriod",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "account",
 						"type": "address"
@@ -179,38 +183,7 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "carCount",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "cars",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
 					{
 						"internalType": "bytes32",
 						"name": "name",
@@ -222,21 +195,21 @@
 						"type": "bytes32"
 					},
 					{
-						"internalType": "enum Rental.CarType",
-						"name": "carType",
+						"internalType": "enum Rental.VehicleType",
+						"name": "vehicleType",
 						"type": "uint8"
 					},
 					{
 						"components": [
 							{
-								"internalType": "string",
+								"internalType": "bytes",
 								"name": "latitude",
-								"type": "string"
+								"type": "bytes"
 							},
 							{
-								"internalType": "string",
+								"internalType": "bytes",
 								"name": "longitude",
-								"type": "string"
+								"type": "bytes"
 							}
 						],
 						"internalType": "struct Rental.Coordinate",
@@ -257,6 +230,180 @@
 						"internalType": "uint256",
 						"name": "rentCost",
 						"type": "uint256"
+					}
+				],
+				"name": "addVehicle",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					}
+				],
+				"name": "completion",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					}
+				],
+				"name": "confirmation",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "contractCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "contracts",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "id",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "name",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "brand",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "enum Rental.VehicleType",
+								"name": "vehicleType",
+								"type": "uint8"
+							},
+							{
+								"components": [
+									{
+										"internalType": "bytes",
+										"name": "latitude",
+										"type": "bytes"
+									},
+									{
+										"internalType": "bytes",
+										"name": "longitude",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct Rental.Coordinate",
+								"name": "location",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "model",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "image",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rentCost",
+								"type": "uint256"
+							},
+							{
+								"internalType": "enum Rental.VehicleStatus",
+								"name": "status",
+								"type": "uint8"
+							}
+						],
+						"internalType": "struct Rental.Vehicle",
+						"name": "selectedVehicle",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "from",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "to",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct Rental.Period",
+						"name": "period",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalCost",
+						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
@@ -265,11 +412,11 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "timestamp",
+						"name": "dateOfIssuance",
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum Rental.CarStatus",
+						"internalType": "enum Rental.ContractStatus",
 						"name": "status",
 						"type": "uint8"
 					}
@@ -285,58 +432,97 @@
 						"type": "uint256"
 					}
 				],
-				"name": "getCarByID",
+				"name": "getContractByID",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "address",
 						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "name",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "brand",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "enum Rental.CarType",
-						"name": "carType",
-						"type": "uint8"
+						"type": "address"
 					},
 					{
 						"components": [
 							{
-								"internalType": "string",
-								"name": "latitude",
-								"type": "string"
+								"internalType": "uint256",
+								"name": "id",
+								"type": "uint256"
 							},
 							{
-								"internalType": "string",
-								"name": "longitude",
-								"type": "string"
+								"internalType": "bytes32",
+								"name": "name",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "brand",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "enum Rental.VehicleType",
+								"name": "vehicleType",
+								"type": "uint8"
+							},
+							{
+								"components": [
+									{
+										"internalType": "bytes",
+										"name": "latitude",
+										"type": "bytes"
+									},
+									{
+										"internalType": "bytes",
+										"name": "longitude",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct Rental.Coordinate",
+								"name": "location",
+								"type": "tuple"
+							},
+							{
+								"internalType": "uint256",
+								"name": "model",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "image",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "uint256",
+								"name": "rentCost",
+								"type": "uint256"
+							},
+							{
+								"internalType": "enum Rental.VehicleStatus",
+								"name": "status",
+								"type": "uint8"
 							}
 						],
-						"internalType": "struct Rental.Coordinate",
-						"name": "location",
+						"internalType": "struct Rental.Vehicle",
+						"name": "selectedVehicle",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "from",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "to",
+								"type": "bytes32"
+							}
+						],
+						"internalType": "struct Rental.Period",
+						"name": "period",
 						"type": "tuple"
 					},
 					{
 						"internalType": "uint256",
-						"name": "model",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bytes32",
-						"name": "image",
-						"type": "bytes32"
-					},
-					{
-						"internalType": "uint256",
-						"name": "rentCost",
+						"name": "totalCost",
 						"type": "uint256"
 					},
 					{
@@ -346,11 +532,11 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "timestamp",
+						"name": "dateOfIssuance",
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum Rental.CarStatus",
+						"internalType": "enum Rental.ContractStatus",
 						"name": "status",
 						"type": "uint8"
 					}
@@ -396,6 +582,77 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "getVehicleByID",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "name",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "brand",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "enum Rental.VehicleType",
+						"name": "vehicleType",
+						"type": "uint8"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes",
+								"name": "latitude",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bytes",
+								"name": "longitude",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct Rental.Coordinate",
+						"name": "location",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "model",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "image",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rentCost",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Rental.VehicleStatus",
+						"name": "status",
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -502,19 +759,115 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vehicleCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "vehicles",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "name",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "brand",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "enum Rental.VehicleType",
+						"name": "vehicleType",
+						"type": "uint8"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes",
+								"name": "latitude",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bytes",
+								"name": "longitude",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct Rental.Coordinate",
+						"name": "location",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "model",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "image",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "rentCost",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Rental.VehicleStatus",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
 			"kind": "dev",
 			"methods": {
-				"addCar(bytes32,bytes32,uint8,(string,string),uint256,bytes32,uint256,uint256)": {
-					"details": "The following function will be used to add Cars. Modifiers:  - Restricted to members of the owner role.  - Should not exist."
+				"addInsurancePackage(uint256,uint256,uint256)": {
+					"details": "The following function will be used to add insurance package to the selected vehicle. Modifiers:  - Restricted to members of the renter role.  - The selected vehicle should be available.  - The selected contract should exist."
 				},
 				"addOwner(address)": {
 					"details": "Add an account to the owner role. Restricted to proposals."
 				},
+				"addRentPeriod(uint256,(bytes32,bytes32),uint256)": {
+					"details": "The following function will be used to add the rent period to the selected vehicle. Modifiers:  - Restricted to members of the renter role.  - The selected vehicle should exist."
+				},
 				"addRenter(address)": {
 					"details": "Add an account to the renter role. Restricted to proposals."
+				},
+				"addVehicle(bytes32,bytes32,uint8,(bytes,bytes),uint256,bytes32,uint256)": {
+					"details": "The following function will be used to add Vehicles. Modifiers:  - Restricted to members of the owner role.  - Should not exist."
+				},
+				"completion(uint256,uint256)": {
+					"details": "The following function will be used to complete the ride and return insurrance money. Modifiers:  - Restricted to members of the renter role.  - The selected vehicle should exist.  - The selected contract should exist.  - The balance of ETH in the billing account wallet should be sufficient."
+				},
+				"confirmation(uint256,uint256)": {
+					"details": "The following function will be used for the selected vehicle and its options (sign contract).  It will include the payment process also. Modifiers:  - Restricted to members of the owner role.  - The selected vehicle should exist.  - The selected vehicle should be available.  - The selected contract should exist.  - The balance of ETH in the billing account wallet should be sufficient."
 				},
 				"getRoleMember(bytes32,uint256)": {
 					"details": "This function will return one of the accounts that contain the 'role' attribute.  The value of the 'index' variable must be between 0 and getRoleMemberCount, excluding both numbers. There is no specific order to the people who hold roles, and the sequence in  which they appear might shift at any time. WARNING:  You need to make sure that all of your queries are performed on the same block  when you are using {getRoleMember} and {getRoleMemberCount}. For more information, take a look at the following: https://forum.openzeppelin.com/t/iterating-over-elements-on-enumerableset-in-openzeppelin-contracts/2296[forum post]"
@@ -549,7 +902,7 @@
 		"userdoc": {
 			"kind": "user",
 			"methods": {
-				"carCount()": {
+				"vehicleCount()": {
 					"notice": "Variables"
 				}
 			},
@@ -589,19 +942,19 @@
 			]
 		},
 		"contracts/Access.sol": {
-			"keccak256": "0x45d905cc4fe4e11043e3d93a18c2dd1b0528e506c6284b1fe989b5a32d09d9ae",
+			"keccak256": "0x399fb6f9de63839c2f3448255ef2c40f27b9cc2d2122114272cdec15dcb1a21c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://475e26a45c39f2e0b006159fbbdb889beed33b4c7634e6cc7c55dcb608f2f90c",
-				"dweb:/ipfs/QmS2m1SCPBURRY1xPphVN1pgbGFL4zWwNWC8RSnQM5X54e"
+				"bzz-raw://98d411dd922290684dc70c56ee0bca3a980d30c5a23a865e76a32e5e11056a4d",
+				"dweb:/ipfs/QmTEgMWtK5erer9tbLrLkRCCFrRn46TUuQwb6evqBQmqa3"
 			]
 		},
 		"contracts/Rental.sol": {
-			"keccak256": "0x98b816895f72fe6bc8067ad84ff4ee2909bb07c54f4eebbddca44b5920ed33c8",
+			"keccak256": "0xe27df7c94895aa3c7aee76270c4c736f1f2a7c849ebf1f6ad04e56dbbddc15db",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8fd674d0abc485c7de26ff26876dc8eea72eb571cfd2d12ee8ac09f2d3e84f7d",
-				"dweb:/ipfs/QmZUoQV1RJaQg1oKDahhW1crUM5MXumcdH5nmvpLpUFBSB"
+				"bzz-raw://a9113b957bbc419108d3096ca0780286386e1647404829c2640c77d2d3450577",
+				"dweb:/ipfs/QmQogWb2SmEo9F2ZuM7optNAbdT6ewp6zV5bfarjoZScCm"
 			]
 		},
 		"contracts/utils/AccessControl.sol": {

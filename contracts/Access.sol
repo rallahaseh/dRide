@@ -8,6 +8,9 @@ abstract contract Access is AccessControl {
     bytes32 public constant OWNER_ROLE = "OWNER";
     bytes32 public constant RENTER_ROLE = "RENTER";
 
+    address payable sender;
+    address payable recipient;
+
     // @dev Restricted to members of the owner role.
     modifier onlyOwner() {
         require(isOwner(msg.sender), "Restricted to owners.");
@@ -32,11 +35,13 @@ abstract contract Access is AccessControl {
 
     /// @dev Add an account to the renter role. Restricted to proposals.
     function addRenter(address account) public virtual {
+        sender = payable(account);
         _grantRole(RENTER_ROLE, account);
     }
 
     /// @dev Add an account to the owner role. Restricted to proposals.
     function addOwner(address account) public virtual {
+        recipient = payable(account);
         _grantRole(OWNER_ROLE, account);
     }
 
