@@ -27,8 +27,8 @@ contract Rental is Access {
 
     /// Structures
     struct Coordinate {
-        bytes latitude;
-        bytes longitude;
+        bytes32 latitude;
+        bytes32 longitude;
     }
     struct Vehicle {
         uint id;
@@ -120,17 +120,19 @@ contract Rental is Access {
      *  - Restricted to members of the owner role.
      *  - Should not exist.
      */
-    function addVehicle(bytes32 name, bytes32 brand, VehicleType vehicleType, Coordinate memory location, uint model, bytes32 image, uint rentCost) 
+    function addVehicle(bytes32 name, bytes32 brand, uint vehicleType, bytes32 latitude, bytes32 longitude, uint model, bytes32 image, uint rentCost) 
         public 
         onlyOwner vehicleDoesNotExsists
         returns (bool success)
     {
         vehicleCount++;
+        VehicleType _vehicleType = VehicleType(vehicleType);
+        Coordinate memory location = Coordinate(latitude, longitude);
         Vehicle memory temporaryObj = Vehicle(
             vehicleCount,
             name,
             brand,
-            vehicleType,
+            _vehicleType,
             location,
             model,
             image,
@@ -150,12 +152,13 @@ contract Rental is Access {
      *  - Restricted to members of the renter role.
      *  - The selected vehicle should exist.
      */
-    function addRentPeriod(uint carId, Period memory period, uint dayscount) 
+    function addRentPeriod(uint carId, bytes32 from, bytes32 to, uint dayscount) 
         public
         onlyRenter vehicleExsists(carId) contractDoesNotExsists
         returns (bool success)
     {
         contractCount++;
+        Period memory period = Period(from, to);
         uint feeAmount = getVehicleByID[carId].rentCost * dayscount;
         Contract memory temporaryObj = Contract(
             msg.sender,

@@ -202,14 +202,14 @@
 					{
 						"components": [
 							{
-								"internalType": "bytes",
+								"internalType": "bytes32",
 								"name": "latitude",
-								"type": "bytes"
+								"type": "bytes32"
 							},
 							{
-								"internalType": "bytes",
+								"internalType": "bytes32",
 								"name": "longitude",
-								"type": "bytes"
+								"type": "bytes32"
 							}
 						],
 						"internalType": "struct Rental.Coordinate",
@@ -344,14 +344,14 @@
 							{
 								"components": [
 									{
-										"internalType": "bytes",
+										"internalType": "bytes32",
 										"name": "latitude",
-										"type": "bytes"
+										"type": "bytes32"
 									},
 									{
-										"internalType": "bytes",
+										"internalType": "bytes32",
 										"name": "longitude",
-										"type": "bytes"
+										"type": "bytes32"
 									}
 								],
 								"internalType": "struct Rental.Coordinate",
@@ -464,14 +464,14 @@
 							{
 								"components": [
 									{
-										"internalType": "bytes",
+										"internalType": "bytes32",
 										"name": "latitude",
-										"type": "bytes"
+										"type": "bytes32"
 									},
 									{
-										"internalType": "bytes",
+										"internalType": "bytes32",
 										"name": "longitude",
-										"type": "bytes"
+										"type": "bytes32"
 									}
 								],
 								"internalType": "struct Rental.Coordinate",
@@ -620,14 +620,14 @@
 					{
 						"components": [
 							{
-								"internalType": "bytes",
+								"internalType": "bytes32",
 								"name": "latitude",
-								"type": "bytes"
+								"type": "bytes32"
 							},
 							{
-								"internalType": "bytes",
+								"internalType": "bytes32",
 								"name": "longitude",
-								"type": "bytes"
+								"type": "bytes32"
 							}
 						],
 						"internalType": "struct Rental.Coordinate",
@@ -819,14 +819,14 @@
 					{
 						"components": [
 							{
-								"internalType": "bytes",
+								"internalType": "bytes32",
 								"name": "latitude",
-								"type": "bytes"
+								"type": "bytes32"
 							},
 							{
-								"internalType": "bytes",
+								"internalType": "bytes32",
 								"name": "longitude",
-								"type": "bytes"
+								"type": "bytes32"
 							}
 						],
 						"internalType": "struct Rental.Coordinate",
@@ -873,7 +873,7 @@
 				"addRenter(address)": {
 					"details": "Add an account to the renter role. Restricted to proposals."
 				},
-				"addVehicle(bytes32,bytes32,uint8,(bytes,bytes),uint256,bytes32,uint256)": {
+				"addVehicle(bytes32,bytes32,uint8,(bytes32,bytes32),uint256,bytes32,uint256)": {
 					"details": "The following function will be used to add Vehicles. Modifiers:  - Restricted to members of the owner role.  - Should not exist."
 				},
 				"completion(uint256,uint256)": {
@@ -966,11 +966,11 @@
 			]
 		},
 		"contracts/Rental.sol": {
-			"keccak256": "0x632969cf86b4b79b0e16dfce822d79732b2050e245eb2618134316de7aea4feb",
+			"keccak256": "0xfaed657cb1ad9af30312afe5d7bfaf2fccadd9fc86d90fbe50f411928f1947c5",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://170c72de1aa85174c906aa5944583bd4ae041fc6f2a05658968e0aa5441b5288",
-				"dweb:/ipfs/QmUW4uyPsrGRRZiF97E75MGemUwNBPQ5mh9iH6Xn1HRusr"
+				"bzz-raw://b0495db330bd84b527d7e7ac270d040e55eafbb34438f02bdd4e2c3f02351c38",
+				"dweb:/ipfs/Qmdh5ZohL1kLED6Gbgky2LbmyHLwvQLcuP3C7TUW21kYsd"
 			]
 		},
 		"contracts/utils/AccessControl.sol": {

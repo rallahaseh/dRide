@@ -14,36 +14,44 @@
 			},
 			{
 				"inputs": [],
-				"name": "checkFailure",
+				"name": "testAddInsurancePackage",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "checkSenderAndValue",
-				"outputs": [],
-				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "checkSuccess",
+				"name": "testAddRentPeriod",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "checkSuccess2",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "pure",
+				"name": "testAddVehicle",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "testCompletion",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "testConfirmation",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "testInitialOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -55,11 +63,8 @@
 		"userdoc": {
 			"kind": "user",
 			"methods": {
-				"beforeAll()": {
-					"notice": "'beforeAll' runs before all other tests More special functions are: 'beforeEach', 'beforeAll', 'afterEach' & 'afterAll'"
-				},
-				"checkSenderAndValue()": {
-					"notice": "Custom Transaction Context: https://remix-ide.readthedocs.io/en/latest/unittesting.html#customization #sender: account-1 #value: 100"
+				"testInitialOwner()": {
+					"notice": "Test if initial owner is set correctly"
 				}
 			},
 			"version": 1
@@ -67,7 +72,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"tests/Access_test.sol": "testSuite"
+			"tests/Rental_test.sol": "testSuite"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -98,11 +103,19 @@
 			]
 		},
 		"contracts/Access.sol": {
-			"keccak256": "0xfb44c2bb3ab5639ad07e1f722059e1d31078498342d16e139a40e4790ebd6aac",
+			"keccak256": "0x399fb6f9de63839c2f3448255ef2c40f27b9cc2d2122114272cdec15dcb1a21c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://601231b5d1c909eba8c5adf2dfd257c7c4a84314bfd85373e5475278d435004d",
-				"dweb:/ipfs/QmfWYLwHzxzkvUg9NLinYCSdgoca8nZC7aCNgUF2SjwXvi"
+				"bzz-raw://98d411dd922290684dc70c56ee0bca3a980d30c5a23a865e76a32e5e11056a4d",
+				"dweb:/ipfs/QmTEgMWtK5erer9tbLrLkRCCFrRn46TUuQwb6evqBQmqa3"
+			]
+		},
+		"contracts/Rental.sol": {
+			"keccak256": "0xdb3d0a33789330c65e754b5511ecaf2d45afaec4693b50ceaf7bb9a1cb259359",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://dfdb73257b936970d9fd8f93d2617b437f20502c3d7b1a36d7f29d5cef83959f",
+				"dweb:/ipfs/QmVfyXzbsfFwa4WGBbcoYD3Trs2WrgjBQxJWfo7YRRPy1Z"
 			]
 		},
 		"contracts/utils/AccessControl.sol": {
@@ -137,12 +150,12 @@
 				"dweb:/ipfs/QmdkW1tT5iadBvaHMCoskhDGZKnfdg8o1D9CcoQYtdJet7"
 			]
 		},
-		"tests/Access_test.sol": {
-			"keccak256": "0xd3a602e3db7375276caed73f7cc24fdf17e25c5a4e5e042b204de466c6e6ecd0",
+		"tests/Rental_test.sol": {
+			"keccak256": "0x4a5b0e8262b135ae2cfe0df99c0be8e1495f99b9cdde32d55a00b099f3ad303b",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://da27aa5d935bc6109afa6faffe71d2e4cc8125a557da34a736e088c1244dd327",
-				"dweb:/ipfs/Qmbhbthbn451qKUBJqPLBnA87Ax9FPazCWoWKViuDD24Je"
+				"bzz-raw://13682748eb855df913890d66e8752db84bf9d12a4c29befac7f5025d58e6ff2c",
+				"dweb:/ipfs/QmT4b3aKbX2UBECCySoxLUsZE1H2J9hDoUcgokBfWiWyPu"
 			]
 		}
 	},
