@@ -1,6 +1,7 @@
 import './App.css'
 import { Container, Header, Title } from '@mantine/core';
 import { WalletInstallation } from './component/organisms/Wallet/Installation';
+import { WalletConnect } from './component/organisms/Wallet/Connect';
 
 function App() {
   const { ethereum } = window as any;
@@ -15,6 +16,7 @@ function App() {
           justifyContent: 'space-between'
         }}>
         <Title>dRide</Title>
+        <WalletConnect />
       </Header>
       {!ethereum ? (
         <Container p="lg">
