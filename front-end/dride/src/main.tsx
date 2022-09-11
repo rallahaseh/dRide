@@ -1,3 +1,4 @@
+import { MantineProvider } from '@mantine/core'
 import { Config, DAppProvider, Goerli } from '@usedapp/core'
 import { getDefaultProvider } from 'ethers'
 import React from 'react'
@@ -17,7 +18,9 @@ const configuration: Config = {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <DAppProvider config={configuration}>
-      <App />
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+        <App />
+      </MantineProvider>
     </DAppProvider>
   </React.StrictMode>
 )
