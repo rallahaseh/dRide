@@ -14,6 +14,204 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					}
+				],
+				"name": "Finished",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "insuranceDeposit",
+						"type": "uint256"
+					}
+				],
+				"name": "InsurancePackageAdded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "id",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "from",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "to",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "dayscount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "totalCost",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "insuranceDeposit",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "dateOfIssuance",
+						"type": "uint256"
+					}
+				],
+				"name": "NewContract",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "name",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "brand",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "vehicleType",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "latitude",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "longitude",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "model",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "image",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "rentCost",
+						"type": "uint256"
+					}
+				],
+				"name": "NewVehicle",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "carId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "totalAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "ProceedPayment",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "contractId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "insuranceDeposit",
+						"type": "uint256"
+					}
+				],
+				"name": "ReturnInsuranceDeposit",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "bytes32",
 						"name": "role",
@@ -136,21 +334,14 @@
 						"type": "uint256"
 					},
 					{
-						"components": [
-							{
-								"internalType": "bytes32",
-								"name": "from",
-								"type": "bytes32"
-							},
-							{
-								"internalType": "bytes32",
-								"name": "to",
-								"type": "bytes32"
-							}
-						],
-						"internalType": "struct Rental.Period",
-						"name": "period",
-						"type": "tuple"
+						"internalType": "bytes32",
+						"name": "from",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "to",
+						"type": "bytes32"
 					},
 					{
 						"internalType": "uint256",
@@ -195,26 +386,19 @@
 						"type": "bytes32"
 					},
 					{
-						"internalType": "enum Rental.VehicleType",
+						"internalType": "uint256",
 						"name": "vehicleType",
-						"type": "uint8"
+						"type": "uint256"
 					},
 					{
-						"components": [
-							{
-								"internalType": "bytes32",
-								"name": "latitude",
-								"type": "bytes32"
-							},
-							{
-								"internalType": "bytes32",
-								"name": "longitude",
-								"type": "bytes32"
-							}
-						],
-						"internalType": "struct Rental.Coordinate",
-						"name": "location",
-						"type": "tuple"
+						"internalType": "bytes32",
+						"name": "latitude",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "longitude",
+						"type": "bytes32"
 					},
 					{
 						"internalType": "uint256",
@@ -867,13 +1051,13 @@
 				"addOwner(address)": {
 					"details": "Add an account to the owner role. Restricted to proposals."
 				},
-				"addRentPeriod(uint256,(bytes32,bytes32),uint256)": {
+				"addRentPeriod(uint256,bytes32,bytes32,uint256)": {
 					"details": "The following function will be used to add the rent period to the selected vehicle. Modifiers:  - Restricted to members of the renter role.  - The selected vehicle should exist."
 				},
 				"addRenter(address)": {
 					"details": "Add an account to the renter role. Restricted to proposals."
 				},
-				"addVehicle(bytes32,bytes32,uint8,(bytes32,bytes32),uint256,bytes32,uint256)": {
+				"addVehicle(bytes32,bytes32,uint256,bytes32,bytes32,uint256,bytes32,uint256)": {
 					"details": "The following function will be used to add Vehicles. Modifiers:  - Restricted to members of the owner role.  - Should not exist."
 				},
 				"completion(uint256,uint256)": {
@@ -916,6 +1100,11 @@
 			"version": 1
 		},
 		"userdoc": {
+			"events": {
+				"NewVehicle(uint256,bytes32,bytes32,uint256,bytes32,bytes32,uint256,bytes32,uint256)": {
+					"notice": "Events"
+				}
+			},
 			"kind": "user",
 			"methods": {
 				"vehicleCount()": {
@@ -927,7 +1116,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/Rental.sol": "Rental"
+			"blockchain/contracts/Rental.sol": "Rental"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -957,36 +1146,36 @@
 				"dweb:/ipfs/QmUqurVVnCc7XkMxb2k23TVQUtuhHZduJ3hTZarTJrqU24"
 			]
 		},
-		"contracts/Access.sol": {
-			"keccak256": "0x399fb6f9de63839c2f3448255ef2c40f27b9cc2d2122114272cdec15dcb1a21c",
+		"blockchain/contracts/Access.sol": {
+			"keccak256": "0xe9df91803050f46ca5a8ecd1f9ed303adac71dc88e592d1edb615d061ebbffda",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://98d411dd922290684dc70c56ee0bca3a980d30c5a23a865e76a32e5e11056a4d",
-				"dweb:/ipfs/QmTEgMWtK5erer9tbLrLkRCCFrRn46TUuQwb6evqBQmqa3"
+				"bzz-raw://a744886cdbc21f82f74e94f8927ed191e9c340d09d27e2348f6d9a40012db3ac",
+				"dweb:/ipfs/QmXjN692YSstM1PkSp7GrWkjLMuguML9MZ9ydqcrGofL1m"
 			]
 		},
-		"contracts/Rental.sol": {
-			"keccak256": "0xfaed657cb1ad9af30312afe5d7bfaf2fccadd9fc86d90fbe50f411928f1947c5",
+		"blockchain/contracts/Rental.sol": {
+			"keccak256": "0x53ff1dd94dcffcc020cc9a81fa6bfa520191db5792c831f73fe5fd4571d16e7c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b0495db330bd84b527d7e7ac270d040e55eafbb34438f02bdd4e2c3f02351c38",
-				"dweb:/ipfs/Qmdh5ZohL1kLED6Gbgky2LbmyHLwvQLcuP3C7TUW21kYsd"
+				"bzz-raw://fd1093e34c2cc212490c8c9198e24133d074a5a43a6aae5394a7957d82f28d4f",
+				"dweb:/ipfs/QmdHQHbXaXNG66dVtMyC4zCNftuGneTZeT2atSsDPh4XKi"
 			]
 		},
-		"contracts/utils/AccessControl.sol": {
-			"keccak256": "0xa5893ba9c0f2af8da3f1e7f03a84a1165e864becac46b8e9b74aaaa550b82be6",
+		"blockchain/contracts/utils/AccessControl.sol": {
+			"keccak256": "0x3ba10d3d1e3be8376d3958b6e168a563fd0b8be365e5a6571aee30f2b3d42554",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://32bc73a084c521c25ccf07f451dcbc6aa9707b59cd7dff7164afaab6aa53a1f0",
-				"dweb:/ipfs/QmWGveVucaET9QgFJYnKUU2irhBNpNdrJ82v66fcgAkSKi"
+				"bzz-raw://7fc0c79a19bc56f95e06a05777bef9956772d86206d8fad6f031aa4d094d7366",
+				"dweb:/ipfs/QmeFDMLzMn4QVVtsTnQHAtnz9wWwawxXS3hAQT3UjSeFZr"
 			]
 		},
-		"contracts/utils/Context.sol": {
-			"keccak256": "0x51faf7c505ab0e60ff53dd336f550d8487b7d7c112b8d07cd1051ae4d3a6a3aa",
+		"blockchain/contracts/utils/Context.sol": {
+			"keccak256": "0x26ef7e5c9968c9a03a16cc36f88dcae2863ae07cd91b501ce898c5231acd8813",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dfd86c7bf611ca2a1243cb6a1ab668113d11b3b012228dd228a803da0fc779e7",
-				"dweb:/ipfs/QmYTmQNsMBRQbMBgmfbFWf3Ve4aXmYqjSWDjkjvSLeHr6t"
+				"bzz-raw://43b411373bb086b3d4256ba3a6feb01de2298230aec68cfd959a4a431f4507e1",
+				"dweb:/ipfs/QmaMWTAESqssGCe4i4c7nyRZZ6vRkNP3gw743ahTdkJwDq"
 			]
 		}
 	},
