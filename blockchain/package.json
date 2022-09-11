@@ -6,10 +6,12 @@
   "directories": {
     "test": "tests"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "mocha"
   },
   "author": "Rashed Al-Lahaseh",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3"
+  }
 }
