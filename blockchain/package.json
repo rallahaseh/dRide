@@ -16,6 +16,8 @@
     "dotenv": "^16.0.2"
   },
   "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.1.1",
+    "ethers": "^5.7.0",
     "hardhat": "^2.11.1"
   }
 }
