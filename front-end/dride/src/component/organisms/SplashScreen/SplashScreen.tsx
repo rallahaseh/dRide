@@ -1,12 +1,12 @@
 import { Image, Box, Overlay, Highlight } from "@mantine/core"
 
-import imgUrl from '../../../assets/splash_background.jpg';
+import imgUrl from '../../../assets/images/splash_background.jpg';
 
 export const SplashScreen = () => {
 
     return (
         <>
-            <Highlight
+            {/* <Highlight
                 sx={{ background: 'transparent' }}
                 align="center"
                 highlight={['dRide']}
@@ -21,7 +21,8 @@ export const SplashScreen = () => {
             <Box sx={{ position: 'relative' }}>
                 <Overlay opacity={0.4} color="#000" />
                 <Image radius="md" src={imgUrl} alt="Splash Screen" />
-            </Box>
+            </Box> */}
+            <Image radius="md" src={imgUrl} alt="Splash Screen" />
         </>
     );
 }
