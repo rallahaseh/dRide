@@ -1,0 +1,224 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/rallahaseh/Developer/dRide/blockchain/contracts/Access.sol": {
+      "lastModificationDate": 1662917263307,
+      "contentHash": "8c09d8b5a8ec34096634d6f6f01b08e1",
+      "sourceName": "contracts/Access.sol",
+      "solcConfig": {
+        "version": "0.8.16",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./utils/AccessControl.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.7.0 < 0.9.0"
+      ],
+      "artifacts": [
+        "Access"
+      ]
+    },
+    "/Users/rallahaseh/Developer/dRide/blockchain/contracts/utils/AccessControl.sol": {
+      "lastModificationDate": 1662917263312,
+      "contentHash": "4246d904bd4418283e8a1cb57985bdb9",
+      "sourceName": "contracts/utils/AccessControl.sol",
+      "solcConfig": {
+        "version": "0.8.16",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/structs/EnumerableMap.sol",
+        "./Context.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.7.0 < 0.9.0"
+      ],
+      "artifacts": [
+        "AccessControl"
+      ]
+    },
+    "/Users/rallahaseh/Developer/dRide/blockchain/contracts/utils/Context.sol": {
+      "lastModificationDate": 1662917263312,
+      "contentHash": "c875b9eaafbf101625e868bd6db1b254",
+      "sourceName": "contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.16",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">= 0.7.0 < 0.9.0"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/rallahaseh/Developer/dRide/blockchain/node_modules/@openzeppelin/contracts/utils/structs/EnumerableMap.sol": {
+      "lastModificationDate": 1662917566906,
+      "contentHash": "d163f6a1debe598957c196b5bf782cd6",
+      "sourceName": "@openzeppelin/contracts/utils/structs/EnumerableMap.sol",
+      "solcConfig": {
+        "version": "0.8.16",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./EnumerableSet.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "EnumerableMap"
+      ]
+    },
+    "/Users/rallahaseh/Developer/dRide/blockchain/node_modules/@openzeppelin/contracts/utils/structs/EnumerableSet.sol": {
+      "lastModificationDate": 1662917566906,
+      "contentHash": "aec6e37069dfaa5e3d5fd66ef2274b0c",
+      "sourceName": "@openzeppelin/contracts/utils/structs/EnumerableSet.sol",
+      "solcConfig": {
+        "version": "0.8.16",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "EnumerableSet"
+      ]
+    },
+    "/Users/rallahaseh/Developer/dRide/blockchain/contracts/Rental.sol": {
+      "lastModificationDate": 1662917263308,
+      "contentHash": "8a82f509b97eb83a6acf52016f0d0fd7",
+      "sourceName": "contracts/Rental.sol",
+      "solcConfig": {
+        "version": "0.8.16",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./Access.sol"
+      ],
+      "versionPragmas": [
+        ">= 0.7.0 < 0.9.0"
+      ],
+      "artifacts": [
+        "Rental"
+      ]
+    }
+  }
+}
