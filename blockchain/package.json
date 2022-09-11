@@ -1,0 +1,15 @@
+{
+  "name": "dride",
+  "version": "1.0.0",
+  "description": "A decentralized car-sharing system using smart contracts.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Rashed Al-Lahaseh",
+  "license": "MIT"
+}
