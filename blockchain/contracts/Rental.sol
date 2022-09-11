@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.7;
+pragma solidity >= 0.7.0 < 0.9.0;
 
 import "./Access.sol";
 
@@ -56,8 +56,8 @@ contract Rental is Access {
     }
 
     /// Variables
-    uint public vehicleCount = 0;
-    uint public contractCount = 0;
+    uint public vehicleCount;
+    uint public contractCount;
 
     mapping(uint => Vehicle) public getVehicleByID;
     Vehicle[] public vehicles;
@@ -111,6 +111,21 @@ contract Rental is Access {
         _;
     }
 
+    /// Events
+
+    // @dev A new vehicle has been added.
+    event NewVehicle(uint id, bytes32 name, bytes32 brand, uint vehicleType, bytes32 latitude, bytes32 longitude, uint model, bytes32 image, uint rentCost);
+    // @dev A new contract has been created.
+    event NewContract(address id, uint carId, bytes32 from, bytes32 to, uint dayscount, uint totalCost, uint insuranceDeposit, uint dateOfIssuance);
+    // @dev An insurance package for existing contracts has been added.
+    event InsurancePackageAdded(uint carId, uint contractId, uint insuranceDeposit);
+    // @dev Payment processing has been done.
+    event ProceedPayment(uint contractId, uint carId, uint totalAmount);
+    // @dev The car rental process for a specific contract has been completed. 
+    event Finished(uint contractId);
+    // @dev After finishing, the car rental insurance deposit is returned to the user.
+    event ReturnInsuranceDeposit(uint contractId, uint insuranceDeposit);
+
     /// Functions
 
     /**
@@ -125,7 +140,6 @@ contract Rental is Access {
         onlyOwner vehicleDoesNotExsists
         returns (bool success)
     {
-        vehicleCount++;
         VehicleType _vehicleType = VehicleType(vehicleType);
         Coordinate memory location = Coordinate(latitude, longitude);
         Vehicle memory temporaryObj = Vehicle(
@@ -141,6 +155,8 @@ contract Rental is Access {
         );
         getVehicleByID[vehicleCount] = temporaryObj;
         vehicles.push(temporaryObj);
+        emit NewVehicle(vehicleCount, name, brand, vehicleType, latitude, longitude, model, image, rentCost);
+        vehicleCount++;
 
         return vehicles.length == vehicleCount;
     }
@@ -157,7 +173,6 @@ contract Rental is Access {
         onlyRenter vehicleExsists(carId) contractDoesNotExsists
         returns (bool success)
     {
-        contractCount++;
         Period memory period = Period(from, to);
         uint feeAmount = getVehicleByID[carId].rentCost * dayscount;
         Contract memory temporaryObj = Contract(
@@ -171,6 +186,8 @@ contract Rental is Access {
         );
         getContractByID[contractCount] = temporaryObj;
         contracts.push(temporaryObj);
+        emit NewContract(msg.sender, carId, from, to, dayscount, feeAmount, 0, block.timestamp);
+        contractCount++;
 
         return contracts.length == contractCount;
     }
@@ -189,6 +206,7 @@ contract Rental is Access {
         returns (bool success)
     {
         getContractByID[contractId].insuranceDeposit = insuranceDeposit;
+        emit InsurancePackageAdded(carId, contractId, insuranceDeposit);
 
         return contracts.length == contractCount;
     }
@@ -215,6 +233,7 @@ contract Rental is Access {
         // Payment process
         uint totalAmount = getContractByID[contractId].totalCost + getContractByID[contractId].insuranceDeposit;
         this.paymentProcess(totalAmount);
+        emit ProceedPayment(contractId, carId, totalAmount);
 
         return contracts.length == contractCount;
     }
@@ -235,12 +254,14 @@ contract Rental is Access {
     {
         // Update statuses
         getContractByID[contractId].status = ContractStatus.Completed;
+        emit Finished(contractId);
         getVehicleByID[carId].status = VehicleStatus.Available;
         // Payment process
         uint insuranceDeposit = getContractByID[contractId].insuranceDeposit;
         address payable recipient = payable(msg.sender);
         (bool sent, ) = recipient.call{value: insuranceDeposit}("");
         require(sent, "Failed to send Ether");
+        emit ReturnInsuranceDeposit(contractId, insuranceDeposit);
         
         return contracts.length == contractCount;
     }
