@@ -1,9 +1,11 @@
 import { TextInput, Text, Button, Group, Box, Avatar, Select, useMantineTheme, Image, SimpleGrid, Divider, Space, NumberInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { IconUpload, IconPhoto, IconX } from '@tabler/icons';
 import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE, FileWithPath } from '@mantine/dropzone';
 import { Map } from '../../main/Map/Map'
+import { stringToBytes32 } from '../../../utils/StringUtils';
+import useContractFunction, { Contracts } from '../../../hooks/UseContract';
 
 const getVehicleTypeList = [
     {
@@ -75,6 +77,14 @@ const SelectItem = forwardRef<HTMLDivElement, VehicleTypeItemProps>(
 
 export function AddVehicle(props: Partial<DropzoneProps>) {
     const theme = useMantineTheme();
+    // Hooks
+    const { loading, success, error, send } = useContractFunction(Contracts.Vehicle.addVehicle);
+
+    useEffect(() => {
+        if (success) {
+            console.log("Success added car");
+        }
+    }, [success]);
 
     // Form
     const form = useForm({
@@ -95,8 +105,18 @@ export function AddVehicle(props: Partial<DropzoneProps>) {
             cost: (value) => (value < 1 ? 'Cost should be greater than 0' : null),
         },
     });
-    const handleSubmit =async (values: typeof form.values) => {
+    const handleSubmit = async (values: typeof form.values) => {
         console.log(values);
+        await send(
+            stringToBytes32(values.name),
+            stringToBytes32(values.brand),
+            values.vehicleType,
+            stringToBytes32(""), // Latitude
+            stringToBytes32(""), // Longitude
+            values.model,
+            stringToBytes32(""), // Image
+            values.cost
+        );
     }
 
     // Upload Files
@@ -205,8 +225,16 @@ export function AddVehicle(props: Partial<DropzoneProps>) {
                 <Group position="center" mt="md">
                     <Map />
                 </Group>
+                {!!error && (
+                    <>
+                        <Space h="md" />
+                        <Text color="red">
+                            An error occurred: {error}
+                        </Text>
+                    </>
+                )}
                 <Group position="center" mt="md">
-                    <Button type="submit">Add Vehicle</Button>
+                    <Button type="submit" loading={loading}>Add Vehicle</Button>
                 </Group>
             </form>
         </Box>
