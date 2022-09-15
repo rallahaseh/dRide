@@ -1,1 +1,0 @@
-export { WalletInstallation } from './WalletInstallation';
