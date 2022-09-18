@@ -6,3 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract ERC4907 is ERC721URIStorage, IERC4907 {
 }
+    struct UserInfo {
+        address user; // address of user role
+        uint64 expires; // unix timestamp, expiration token date
+    }
