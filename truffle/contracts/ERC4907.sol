@@ -33,3 +33,21 @@ contract ERC4907 is ERC721URIStorage, IERC4907 {
         info.expires = expires;
         emit UpdateUser(tokenId, user, expires);
     }
+
+    /// @notice Retrieve the user address by token id.
+    /// @dev Returning a zero address indicates that there is no user or the token has expired.
+    /// @param tokenId Is a reference to the NFT
+    /// @return address NFT user address
+    function userOf(uint256 tokenId)
+        public
+        view
+        virtual
+        override
+        returns (address)
+    {
+        if (uint256(_users[tokenId].expires) >= block.timestamp) {
+            return _users[tokenId].user;
+        } else {
+            return address(0);
+        }
+    }
