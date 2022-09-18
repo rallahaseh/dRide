@@ -85,3 +85,20 @@ contract ERC4907 is ERC721URIStorage, IERC4907 {
             interfaceId == type(IERC4907).interfaceId ||
             super.supportsInterface(interfaceId);
     }
+
+    /**
+     * @dev This function will make sure that the transaction will not be transferred to
+     * the same user who already has the NFT.
+     */
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override {
+        super._beforeTokenTransfer(from, to, tokenId);
+
+        if (from != to && _users[tokenId].user != address(0)) {
+            delete _users[tokenId];
+            emit UpdateUser(tokenId, address(0), 0);
+        }
+    }
