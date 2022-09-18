@@ -10,3 +10,5 @@ contract ERC4907 is ERC721URIStorage, IERC4907 {
         address user; // address of user role
         uint64 expires; // unix timestamp, expiration token date
     }
+
+    mapping(uint256 => UserInfo) internal _users;
