@@ -65,3 +65,23 @@ contract ERC4907 is ERC721URIStorage, IERC4907 {
     {
         return _users[tokenId].expires;
     }
+
+    /**
+     * @dev This function will return true if the interface identified by 'interfaceId' is
+     * one that is implemented by this contract.
+     *
+     * See the corresponding
+     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+     * to learn more about how these ids are created.
+     */
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override
+        returns (bool)
+    {
+        return
+            interfaceId == type(IERC4907).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
