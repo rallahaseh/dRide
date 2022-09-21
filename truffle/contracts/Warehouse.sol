@@ -6,4 +6,10 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract Warehouse is ReentrancyGuard {
   constructor() public {
   }
+    // Warehouse Owner
+    address private _warehouseOwner;
+
+    constructor() {
+        _warehouseOwner = msg.sender;
+    }
 }
