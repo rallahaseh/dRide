@@ -69,6 +69,12 @@ contract Warehouse is ReentrancyGuard {
         uint256 endDateUNIX,
         uint256 expiryDate
     );
+    event NFTUnlisted(
+        address unlistSender,
+        address nftContract,
+        uint256 tokenId,
+        uint256 refund
+    );
     event NFTRented(
         address owner,
         address user,
@@ -113,10 +119,13 @@ contract Warehouse is ReentrancyGuard {
         validateEndDate(startDateUNIX, endDateUNIX)
         nonReentrant
     {
-        require(isRentableNFT(nftContract), "Contract is not an ERC4907");
+        require(
+            isRentableNFT(nftContract),
+            "The contract is not ERC4907 protocol."
+        );
         require(
             _listingMap[nftContract][tokenId].nftContract == address(0),
-            "This NFT has already been listed"
+            "This NFT was included on the list before."
         );
         _listingMap[nftContract][tokenId] = Listing(
             msg.sender,
@@ -165,6 +174,52 @@ contract Warehouse is ReentrancyGuard {
     }
 
     /**
+     * @notice Unlist your rental from an NFT (Also refunding user, if there is lost time)
+     * @dev Modifiers
+     * - To protect against reentrancy attacks
+     * @param nftContract  Contract address
+     * @param tokenId  Generated token id
+     */
+    function unlistNFT(address nftContract, uint256 tokenId)
+        public
+        payable
+        nonReentrant
+    {
+        Listing storage listing = _listingMap[nftContract][tokenId];
+        require(
+            listing.owner != address(0),
+            "This NFT is not included in the list."
+        );
+        require(
+            listing.owner == msg.sender || _warehouseOwner == msg.sender,
+            "The request to delist NFT was denied."
+        );
+        // The fee will be returned to the user if the listing is taken down before the end of the rental period,
+        // but there will be no refund if there is no renter.
+        uint256 refund = 0;
+        if (listing.renter != address(0)) {
+            uint256 diff = listing.expiryDate - block.timestamp;
+            uint256 perDiem = diff / 60 / 60 / 24 + 1;
+            refund = perDiem * listing.pricePerDay;
+            require(
+                msg.value >= refund,
+                "Could not proceed refund because there is not enough ETH in your wallet"
+            );
+            payable(listing.renter).transfer(refund);
+        }
+        // Remove user data
+        IERC4907(nftContract).setUser(tokenId, address(0), 0);
+        EnumerableSet.remove(_nftContractTokensMap[nftContract], tokenId);
+        delete _listingMap[nftContract][tokenId];
+        if (EnumerableSet.length(_nftContractTokensMap[nftContract]) == 0) {
+            EnumerableSet.remove(_nftContracts, nftContract);
+        }
+        _nftsListed.decrement();
+
+        emit NFTUnlisted(msg.sender, nftContract, tokenId, refund);
+    }
+
+    /**
      * @notice Rent an NFT
      * @dev Modifiers
      * - To protect against reentrancy attacks
@@ -179,7 +234,8 @@ contract Warehouse is ReentrancyGuard {
     ) public payable nonReentrant {
         Listing storage listing = _listingMap[nftContract][tokenId];
         require(
-            listing.renter == address(0) || block.timestamp > listing.expiryDate,
+            listing.renter == address(0) ||
+                block.timestamp > listing.expiryDate,
             "NFT has already been rented."
         );
         require(
