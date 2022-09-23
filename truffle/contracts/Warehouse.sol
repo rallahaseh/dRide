@@ -69,6 +69,16 @@ contract Warehouse is ReentrancyGuard {
         uint256 endDateUNIX,
         uint256 expiryDate
     );
+    event NFTRented(
+        address owner,
+        address user,
+        address nftContract,
+        uint256 tokenId,
+        uint256 startDateUNIX,
+        uint256 endDateUNIX,
+        uint64 expiryDate,
+        uint256 rentalFee
+    );
 
     constructor() {
         _warehouseOwner = msg.sender;
@@ -82,6 +92,7 @@ contract Warehouse is ReentrancyGuard {
      * - Check if the listing properties (i.e., price, start date, and end date) are valid values.
      * - Check if the owner has enough balance in the ETH wallet to cover the listing fee.
      * - Check if the NFT has not already been listed.
+     * - To protect against reentrancy attacks.
      * @param nftContract  Contract address
      * @param tokenId  Generated token id
      * @param pricePerDay  Price/day
@@ -151,5 +162,52 @@ contract Warehouse is ReentrancyGuard {
             return false;
         }
         return _isRentable && _isNFT;
+    }
+
+    /**
+     * @notice Rent an NFT
+     * @dev Modifiers
+     * - To protect against reentrancy attacks
+     * @param nftContract  Contract address
+     * @param tokenId  Generated token id
+     * @param expiryDate  Rental period
+     */
+    function rentNFT(
+        address nftContract,
+        uint256 tokenId,
+        uint64 expiryDate
+    ) public payable nonReentrant {
+        Listing storage listing = _listingMap[nftContract][tokenId];
+        require(
+            listing.renter == address(0) || block.timestamp > listing.expiryDate,
+            "NFT has already been rented."
+        );
+        require(
+            expiryDate <= listing.endDateUNIX,
+            "The rental period exceeds the maximum date rentable."
+        );
+        // Transfer rental fee
+        uint256 numDays = (expiryDate - block.timestamp) / 60 / 60 / 24 + 1; // Calculate number of days
+        uint256 rentalFee = listing.pricePerDay * numDays; // Total amount of fees
+        require(
+            msg.value >= rentalFee,
+            "Could not proceed because there is not enough ETH in your wallet to cover rental period"
+        );
+        payable(listing.owner).transfer(rentalFee);
+        // Update listing
+        IERC4907(nftContract).setUser(tokenId, msg.sender, expiryDate); // Set owner
+        listing.renter = msg.sender; // Set renter
+        listing.expiryDate = expiryDate; // Set NFT expiry date
+
+        emit NFTRented(
+            IERC721(nftContract).ownerOf(tokenId),
+            msg.sender,
+            nftContract,
+            tokenId,
+            listing.startDateUNIX,
+            listing.endDateUNIX,
+            expiryDate,
+            rentalFee
+        );
     }
 }
