@@ -5,11 +5,15 @@ import "./ERC4907.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract RentableVehicles is ERC4907 {
-    /// @dev Intiate counter to refer to NFT as IDs.
     using Counters for Counters.Counter;
+
+    /// Variables
+    address private _warehouseContract;
     Counters.Counter private _tokenIds;
 
-    constructor() ERC4907("RentableVehicles", "RV") {}
+    constructor(address warehouseContract) ERC4907("RentableVehicles", "RV") {
+        _warehouseContract = warehouseContract;
+    }
 
     /**
      * @dev Minting an NFT refers to converting digital files into crypto collections
@@ -19,6 +23,7 @@ contract RentableVehicles is ERC4907 {
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
         _safeMint(msg.sender, newTokenId);
+        setApprovalForAll(_warehouseContract, true);
         _setTokenURI(newTokenId, _tokenURI);
     }
 
