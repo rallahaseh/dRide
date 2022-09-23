@@ -57,4 +57,24 @@ contract Warehouse is ReentrancyGuard {
     constructor() {
         _warehouseOwner = msg.sender;
     }
+    /// @dev A helper function for determining whether the token contract meets the standard.
+    function isRentableNFT(address nftContract) public view returns (bool) {
+        bool _isRentable = false;
+        bool _isNFT = false;
+        try
+            IERC165(nftContract).supportsInterface(type(IERC4907).interfaceId)
+        returns (bool rentable) {
+            _isRentable = rentable;
+        } catch {
+            return false;
+        }
+        try
+            IERC165(nftContract).supportsInterface(type(IERC721).interfaceId)
+        returns (bool nft) {
+            _isNFT = nft;
+        } catch {
+            return false;
+        }
+        return _isRentable && _isNFT;
+    }
 }
