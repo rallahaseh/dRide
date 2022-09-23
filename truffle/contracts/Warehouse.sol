@@ -21,8 +21,11 @@ contract Warehouse is ReentrancyGuard {
     }
     // Translates contract address to token id, which is then mapped to the features of the rental listing
     mapping(address => mapping(uint256 => Listing)) private _listingMap;
+    // Takes a list of tokens and converts NFT contracts into those tokens.
+    mapping(address => EnumerableSet.UintSet) private _nftContractTokensMap;
+    // Monitors the nft contracts that have been posted on the website.
+    EnumerableSet.AddressSet private _nftContracts;
 
-    // Warehouse Owner
     using Counters for Counters.Counter;
     using EnumerableSet for EnumerableSet.AddressSet;
     using EnumerableSet for EnumerableSet.UintSet;
@@ -54,9 +57,77 @@ contract Warehouse is ReentrancyGuard {
         );
         _;
     }
+
+    /// Events
+    event NFTListed(
+        address owner,
+        address user,
+        address nftContract,
+        uint256 tokenId,
+        uint256 pricePerDay,
+        uint256 startDateUNIX,
+        uint256 endDateUNIX,
+        uint256 expires
+    );
+
     constructor() {
         _warehouseOwner = msg.sender;
     }
+
+    /**
+     * @notice List an NFT
+     * @dev Modifiers
+     * - Check the NFT is ERC4907 and ERC721 compliant
+     * @param nftContract  Contract address
+     * @param tokenId  Generated token id
+     * @param pricePerDay  Price/day
+     * @param startDateUNIX  UNIX timestamp start date
+     * @param endDateUNIX  UNIX timestamp expires date
+     */
+    function listNFT(
+        address nftContract,
+        uint256 tokenId,
+        uint256 pricePerDay,
+        uint256 startDateUNIX,
+        uint256 endDateUNIX
+    )
+        public
+        ownerOfIERC721(nftContract, tokenId)
+        correctPrice(pricePerDay)
+        validateStartDate(startDateUNIX)
+        validateEndDate(startDateUNIX, endDateUNIX)
+        nonReentrant
+    {
+        require(isRentableNFT(nftContract), "Contract is not an ERC4907");
+        require(
+            _listingMap[nftContract][tokenId].nftContract == address(0),
+            "This NFT has already been listed"
+        );
+        _listingMap[nftContract][tokenId] = Listing(
+            msg.sender,
+            address(0),
+            nftContract,
+            tokenId,
+            pricePerDay,
+            startDateUNIX,
+            endDateUNIX,
+            0
+        );
+        _nftsListed.increment();
+        EnumerableSet.add(_nftContractTokensMap[nftContract], tokenId);
+        EnumerableSet.add(_nftContracts, nftContract);
+        emit NFTListed(
+            IERC721(nftContract).ownerOf(tokenId),
+            address(0),
+            nftContract,
+            tokenId,
+            pricePerDay,
+            startDateUNIX,
+            endDateUNIX,
+            0
+        );
+    }
+
     /// @dev A helper function for determining whether the token contract meets the standard.
     function isRentableNFT(address nftContract) public view returns (bool) {
         bool _isRentable = false;
