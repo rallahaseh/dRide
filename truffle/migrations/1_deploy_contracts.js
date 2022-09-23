@@ -1,5 +1,8 @@
 const RentableVehicles = artifacts.require("RentableVehicles");
+const Warehouse = artifacts.require("Warehouse");
 
-module.exports = function (deployer) {
-  deployer.deploy(RentableVehicles);
+module.exports = async function (deployer) {
+  await deployer.deploy(Warehouse);
+  const warehouse = await Warehouse.deployed();
+  await deployer.deploy(RentableVehicles, warehouse.address);
 };
