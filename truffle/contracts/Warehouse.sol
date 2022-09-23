@@ -266,4 +266,31 @@ contract Warehouse is ReentrancyGuard {
             rentalFee
         );
     }
+
+    /**
+     * @notice Retreive the list of all listed NFTs
+     * @dev This is function will be used only for testing
+     * WARNING:
+     * This procedure will transfer everything from storage into memory, which may be a very costly endeavor. 
+     * This is intended to be utilized by accessors the majority of the time since there are no gas expenses
+     * associated with querying them. Developers need to keep in mind that this function has an unbounded cost
+     * and that if they use it as part of a function that changes the state, the function might become uncallable 
+     * if the set grows to the point where copying it to memory requires too much gas to fit in a block. 
+     * This is something that should be kept in mind at all times.
+     * 
+     */
+    function getAllListings() public view returns (Listing[] memory) {
+        Listing[] memory listings = new Listing[](_nftsListed.current());
+        uint256 listingsIndex = 0;
+        address[] memory nftContracts = EnumerableSet.values(_nftContracts);
+        for (uint i = 0; i < nftContracts.length; i++) {
+            address nftAddress = nftContracts[i];
+            uint256[] memory tokens = EnumerableSet.values(_nftContractTokensMap[nftAddress]);
+            for (uint j = 0; j < tokens.length; j++) {
+                listings[listingsIndex] = _listingMap[nftAddress][tokens[j]];
+                listingsIndex++;
+            }
+        }
+        return listings;
+    }
 }
