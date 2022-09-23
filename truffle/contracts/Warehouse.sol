@@ -17,7 +17,7 @@ contract Warehouse is ReentrancyGuard {
         uint256 pricePerDay; // Price
         uint256 startDateUNIX; // Rental start date
         uint256 endDateUNIX; // Rental end date
-        uint256 expires; // Rental expiry date
+        uint256 expiryDate; // Rental expiry date
     }
     // Translates contract address to token id, which is then mapped to the features of the rental listing
     mapping(address => mapping(uint256 => Listing)) private _listingMap;
@@ -53,7 +53,7 @@ contract Warehouse is ReentrancyGuard {
     modifier validateEndDate(uint256 startDate, uint256 endDate) {
         require(
             endDate >= startDate,
-            "End date cannot be before the start date"
+            "End date cannot be older than start date"
         );
         _;
     }
@@ -67,7 +67,7 @@ contract Warehouse is ReentrancyGuard {
         uint256 pricePerDay,
         uint256 startDateUNIX,
         uint256 endDateUNIX,
-        uint256 expires
+        uint256 expiryDate
     );
 
     constructor() {
@@ -78,11 +78,15 @@ contract Warehouse is ReentrancyGuard {
      * @notice List an NFT
      * @dev Modifiers
      * - Check the NFT is ERC4907 and ERC721 compliant
+     * - Check if the owner of the NFT is on the list.
+     * - Check if the listing properties (i.e., price, start date, and end date) are valid values.
+     * - Check if the owner has enough balance in the ETH wallet to cover the listing fee.
+     * - Check if the NFT has not already been listed.
      * @param nftContract  Contract address
      * @param tokenId  Generated token id
      * @param pricePerDay  Price/day
      * @param startDateUNIX  UNIX timestamp start date
-     * @param endDateUNIX  UNIX timestamp expires date
+     * @param endDateUNIX  UNIX timestamp expiry date
      */
     function listNFT(
         address nftContract,
