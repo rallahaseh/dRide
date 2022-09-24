@@ -52,8 +52,8 @@ contract(CONTRACT_NAME, function (accounts) {
   */
   it("Should return the correct UserInfo", async () => {
     const RentableVehiclesInstance = await RentableVehicles.deployed();
-    const expirationDatePast = 1663452000; // Sep 18 2022
-    const expirationDateFuture = 1663711200; // Sep 21 2022
+    const expirationDatePast = 1663884000; // Sep 23 2022
+    const expirationDateFuture = 1664143200; // Sep 26 2022
     await RentableVehiclesInstance.mint("fakeURI");
     await RentableVehiclesInstance.mint("fakeURI");
     // Set and get UserInfo
