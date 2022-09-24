@@ -38,22 +38,22 @@ contract Warehouse is ReentrancyGuard {
     modifier ownerOfIERC721(address nftContract, uint256 tokenId) {
         require(
             IERC721(nftContract).ownerOf(tokenId) == msg.sender,
-            "Not owner of nft"
+            "The following address is not the owner."
         );
         _;
     }
     modifier correctPrice(uint256 price) {
-        require(price > 0, "Rental price should be greater than 0");
+        require(price > 0, "The rental price should be greater than zero.");
         _;
     }
     modifier validateStartDate(uint256 date) {
-        require(date >= block.timestamp, "Start date cannot be in the past");
+        require(date >= block.timestamp, "The beginning date cannot be in the past.");
         _;
     }
     modifier validateEndDate(uint256 startDate, uint256 endDate) {
         require(
             endDate >= startDate,
-            "End date cannot be older than start date"
+            "The end date cannot be later than the beginning date."
         );
         _;
     }
