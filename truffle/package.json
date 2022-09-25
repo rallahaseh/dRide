@@ -5,7 +5,7 @@
   "main": "truffle-config.js",
   "dependencies": {
     "@openzeppelin/contracts": "^4.7.3",
-    "@truffle/hdwallet-provider": "^2.0.10"
+    "dotenv": "^16.0.2"
   },
   "scripts": {
     "test": "truffle test"
@@ -13,6 +13,8 @@
   "author": "Rashed Al-Lahaseh",
   "license": "MIT",
   "devDependencies": {
-    "@openzeppelin/test-helpers": "^0.5.16"
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "@truffle/hdwallet-provider": "^2.0.15",
+    "truffle-plugin-verify": "^0.5.28"
   }
 }
