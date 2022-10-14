@@ -6,10 +6,10 @@ require("@openzeppelin/test-helpers/configure")({
 });
 
 const { balance, constants, ether, expectRevert, expectEvent } = require('@openzeppelin/test-helpers');
-const WAREHOUSE_CONTRACT_NAME = "Warehouse";
+const MARKETPLACE_CONTRACT_NAME = "Marketplace";
 const RENTABLE_CONTRACT_NAME = "RentableVehicles";
 
-const Warehouse = artifacts.require(WAREHOUSE_CONTRACT_NAME);
+const Marketplace = artifacts.require(MARKETPLACE_CONTRACT_NAME);
 const RentableVehicles = artifacts.require(RENTABLE_CONTRACT_NAME);
 
 const TODAY = Math.floor(Date.now() / 1000);
@@ -62,17 +62,17 @@ function listingToString(listing) {
   }
 }
 
-contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
-  const WAREHOUSE_OWNER = accounts[0];
+contract(MARKETPLACE_CONTRACT_NAME, function (accounts) {
+  const MARKETPLACE_OWNER = accounts[0];
   const TOKEN_OWNER = accounts[1];
   const RENTER = accounts[2];
-  let warehouse;
+  let marketplace;
   let rentableVehicles;
   let nftContract;
 
   before('should reuse variables', async () => {
     // Initialize contracts
-    warehouse = await Warehouse.deployed();
+    marketplace = await Marketplace.deployed();
     rentableVehicles = await RentableVehicles.deployed();
     nftContract = rentableVehicles.address;
 
@@ -87,9 +87,9 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
    * 
    */
   it("Should list NFT", async function () {
-    let tracker = await balance.tracker(WAREHOUSE_OWNER);
+    let tracker = await balance.tracker(MARKETPLACE_OWNER);
     await tracker.get();
-    let txn = await warehouse.listNFT(nftContract, 1, ether("1"), TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER });
+    let txn = await marketplace.listNFT(nftContract, 1, ether("1"), TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER });
     let expectedListing = {
       owner: TOKEN_OWNER,
       renter: constants.ZERO_ADDRESS,
@@ -100,16 +100,16 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
       endDateUNIX: IN_FIVE_DAYS,
       expiryDate: 0
     };
-    assertListing(getListing(await warehouse.getAllListings.call(), 1), expectedListing);
+    assertListing(getListing(await marketplace.getAllListings.call(), 1), expectedListing);
     expectEvent(txn, "NFTListed", listingToString(expectedListing));
     await tracker.get();
-    txn = await warehouse.listNFT(nftContract, 2, ether(".5"), TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER });
+    txn = await marketplace.listNFT(nftContract, 2, ether(".5"), TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER });
     expectedListing.tokenId = 2;
     expectedListing.pricePerDay = ether(".5");
     expectedListing.startDateUNIX = TOMORROW;
     expectedListing.endDateUNIX = IN_FIVE_DAYS;
     expectedListing.expires = 0;
-    assertListing(getListing(await warehouse.getAllListings.call(), 2), expectedListing);
+    assertListing(getListing(await marketplace.getAllListings.call(), 2), expectedListing);
     expectEvent(txn, "NFTListed", listingToString(expectedListing));
   });
 
@@ -120,28 +120,28 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
   it("Should validate listings", async function () {
     /*
     await expectRevert(
-      warehouse.listNFT(warehouse.address, 1, 1, TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
+      marketplace.listNFT(marketplace.address, 1, 1, TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
       "The contract is not ERC4907 protocol."
     );
     */
     await expectRevert(
-      warehouse.listNFT(nftContract, 1, 1, TOMORROW, IN_FIVE_DAYS, { from: accounts[2] }),
+      marketplace.listNFT(nftContract, 1, 1, TOMORROW, IN_FIVE_DAYS, { from: accounts[2] }),
       "The following address is not the owner."
     );
     await expectRevert(
-      warehouse.listNFT(nftContract, 1, 0, TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
+      marketplace.listNFT(nftContract, 1, 0, TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
       "The rental price should be greater than zero."
     );
     await expectRevert(
-      warehouse.listNFT(nftContract, 1, 1, YESTERDAY, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
+      marketplace.listNFT(nftContract, 1, 1, YESTERDAY, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
       "The beginning date cannot be in the past."
     );
     await expectRevert(
-      warehouse.listNFT(nftContract, 1, 1, IN_FIVE_DAYS, YESTERDAY, { from: TOKEN_OWNER }),
+      marketplace.listNFT(nftContract, 1, 1, IN_FIVE_DAYS, YESTERDAY, { from: TOKEN_OWNER }),
       "The end date cannot be later than the beginning date."
     );
     await expectRevert(
-      warehouse.listNFT(nftContract, 1, 1, TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
+      marketplace.listNFT(nftContract, 1, 1, TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER }),
       "This NFT was included on the list before."
     );
   });
@@ -155,10 +155,10 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
     assertNFT(rentableVehicles, 2, constants.ZERO_ADDRESS, 0);
     let tracker = await balance.tracker(TOKEN_OWNER);
     await tracker.get();
-    let txn = await warehouse.rentNFT(nftContract, 1, TODAY_2, { from: RENTER, value: ether("1") });
+    let txn = await marketplace.rentNFT(nftContract, 1, TODAY_2, { from: RENTER, value: ether("1") });
     // 1 day rental, pricePerDay is 1
     assert.equal((await tracker.delta()).toString(), ether("1").toString(), "One day rental fee is not correct");
-    let listing = getListing(await warehouse.getAllListings.call(), 1);
+    let listing = getListing(await marketplace.getAllListings.call(), 1);
     let expectedListing = {
       owner: TOKEN_OWNER,
       renter: RENTER,
@@ -174,9 +174,9 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
     assertNFT(rentableVehicles, 1, RENTER, TODAY_2);
     expectEvent(txn, "NFTRented", listingToString(expectedListing));
     await tracker.get();
-    txn = await warehouse.rentNFT(nftContract, 2, IN_FIVE_DAYS, { from: RENTER, value: ether("2.5") });
+    txn = await marketplace.rentNFT(nftContract, 2, IN_FIVE_DAYS, { from: RENTER, value: ether("2.5") });
     assert.equal((await tracker.delta()).toString(), ether("2.5").toString(), "Five day rental fee is not correct");
-    listing = getListing(await warehouse.getAllListings.call(), 2);
+    listing = getListing(await marketplace.getAllListings.call(), 2);
     expectedListing.tokenId = 2;
     expectedListing.pricePerDay = ether(".5");
     expectedListing.expiryDate = IN_FIVE_DAYS;
@@ -192,16 +192,16 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
    */
   it("Should verify rents", async function () {
     await expectRevert(
-      warehouse.rentNFT(nftContract, 1, TODAY_2, { from: RENTER, value: ether("1") }),
+      marketplace.rentNFT(nftContract, 1, TODAY_2, { from: RENTER, value: ether("1") }),
       "NFT has already been rented."
     );
-    await warehouse.listNFT(nftContract, 3, ether("1"), TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER });
+    await marketplace.listNFT(nftContract, 3, ether("1"), TOMORROW, IN_FIVE_DAYS, { from: TOKEN_OWNER });
     await expectRevert(
-      warehouse.rentNFT(nftContract, 3, IN_FIVE_DAYS + 1000, { from: RENTER, value: ether("2.5") }),
+      marketplace.rentNFT(nftContract, 3, IN_FIVE_DAYS + 1000, { from: RENTER, value: ether("2.5") }),
       "The rental period exceeds the maximum date rentable."
     );
     await expectRevert(
-      warehouse.rentNFT(nftContract, 3, TOMORROW, { from: RENTER }),
+      marketplace.rentNFT(nftContract, 3, TOMORROW, { from: RENTER }),
       "Could not proceed because there is not enough ETH in your wallet to cover rental period"
     );
   });
@@ -212,15 +212,15 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
    */
   it("Should verify unlisting", async function () {
     await expectRevert(
-      warehouse.unlistNFT(nftContract, 4, { from: TOKEN_OWNER, value: ether("2.5") }),
+      marketplace.unlistNFT(nftContract, 4, { from: TOKEN_OWNER, value: ether("2.5") }),
       "This NFT is not included in the list."
     );
     await expectRevert(
-      warehouse.unlistNFT(nftContract, 2, { from: RENTER, value: ether("2.5") }),
+      marketplace.unlistNFT(nftContract, 2, { from: RENTER, value: ether("2.5") }),
       "The request to delist NFT was denied."
     );
     await expectRevert(
-      warehouse.unlistNFT(nftContract, 2, { from: TOKEN_OWNER }),
+      marketplace.unlistNFT(nftContract, 2, { from: TOKEN_OWNER }),
       "Could not proceed refund because there is not enough ETH in your wallet"
     );
   });
@@ -233,9 +233,9 @@ contract(WAREHOUSE_CONTRACT_NAME, function (accounts) {
   it("Should reimburse the renter and clear up listings if the renter was unlisted", async function () {
     let tracker = await balance.tracker(RENTER);
     await tracker.get();
-    let txn = await warehouse.unlistNFT(nftContract, 2, {from: TOKEN_OWNER, value: ether("2.5")});
+    let txn = await marketplace.unlistNFT(nftContract, 2, {from: TOKEN_OWNER, value: ether("2.5")});
     assert.equal((await tracker.delta()).toString(), ether("2.5"), "Refunded amount is not correct");
-    let listing = getListing(await warehouse.getAllListings.call(), 2);
+    let listing = getListing(await marketplace.getAllListings.call(), 2);
     assert.equal(Object.keys(listing).length, 0, "NFT was not unlisted");
     assertNFT(rentableVehicles, 2, constants.ZERO_ADDRESS, 0);
     expectEvent(txn, "NFTUnlisted", {

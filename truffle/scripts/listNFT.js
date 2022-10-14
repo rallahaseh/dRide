@@ -1,4 +1,4 @@
-const Warehouse = artifacts.require("Warehouse");
+const Marketplace = artifacts.require("Marketplace");
 const TODAY = Math.floor(Date.now()/1000) + (60*60);
 const TOMORROW = TODAY + (24*60*60);
 const ERC721_ABI = [
@@ -25,12 +25,12 @@ const END = TOMORROW;
 
 const main = async (cb) => {
     try {
-        const warehouse = await Warehouse.deployed();
+        const marketplace = await Marketplace.deployed();
         const nftContract = new web3.eth.Contract(ERC721_ABI, NFT_CONTRACT);
         const owner = await nftContract.methods.ownerOf(TOKEN_ID).call();
-        let txn = await nftContract.methods.approve(warehouse.address, TOKEN_ID).send({from: owner});
+        let txn = await nftContract.methods.approve(marketplace.address, TOKEN_ID).send({from: owner});
         console.log(txn);
-        txn = await warehouse.listNFT(NFT_CONTRACT, TOKEN_ID, PRICE, START, END, {from: owner});
+        txn = await marketplace.listNFT(NFT_CONTRACT, TOKEN_ID, PRICE, START, END, {from: owner});
         console.log(txn);
     } catch(err) {
         console.log(err);

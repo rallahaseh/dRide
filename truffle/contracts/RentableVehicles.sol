@@ -8,11 +8,11 @@ contract RentableVehicles is ERC4907 {
     using Counters for Counters.Counter;
 
     /// Variables
-    address private _warehouseContract;
+    address private _marketplaceContract;
     Counters.Counter private _tokenIds;
 
-    constructor(address warehouseContract) ERC4907("RentableVehicles", "RV") {
-        _warehouseContract = warehouseContract;
+    constructor(address marketplaceContract) ERC4907("RentableVehicles", "RV") {
+        _marketplaceContract = marketplaceContract;
     }
 
     /**
@@ -23,7 +23,7 @@ contract RentableVehicles is ERC4907 {
         _tokenIds.increment();
         uint256 newTokenId = _tokenIds.current();
         _safeMint(msg.sender, newTokenId);
-        setApprovalForAll(_warehouseContract, true);
+        setApprovalForAll(_marketplaceContract, true);
         _setTokenURI(newTokenId, _tokenURI);
     }
 

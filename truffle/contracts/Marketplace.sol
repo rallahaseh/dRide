@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/interfaces/IERC721.sol";
 import "./IERC4907.sol";
 
-contract Warehouse is ReentrancyGuard {
+contract Marketplace is ReentrancyGuard {
     struct Listing {
         address owner;
         address renter;
@@ -32,7 +32,7 @@ contract Warehouse is ReentrancyGuard {
 
     /// Variables
     Counters.Counter private _nftsListed;
-    address private _warehouseOwner;
+    address private _marketplaceOwner;
 
     /// Modifiers
     modifier ownerOfIERC721(address nftContract, uint256 tokenId) {
@@ -87,7 +87,7 @@ contract Warehouse is ReentrancyGuard {
     );
 
     constructor() {
-        _warehouseOwner = msg.sender;
+        _marketplaceOwner = msg.sender;
     }
 
     /**
@@ -191,7 +191,7 @@ contract Warehouse is ReentrancyGuard {
             "This NFT is not included in the list."
         );
         require(
-            listing.owner == msg.sender || _warehouseOwner == msg.sender,
+            listing.owner == msg.sender || _marketplaceOwner == msg.sender,
             "The request to delist NFT was denied."
         );
         // The fee will be returned to the user if the listing is taken down before the end of the rental period,
