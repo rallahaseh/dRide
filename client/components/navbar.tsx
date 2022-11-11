@@ -9,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import CarRentalIcon from '@mui/icons-material/CarRental';
@@ -127,7 +128,7 @@ export function NavBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {/* TODO: - Add Wallet Button */}
+            <ConnectButton />
           </Box>
         </Toolbar>
       </Container>
