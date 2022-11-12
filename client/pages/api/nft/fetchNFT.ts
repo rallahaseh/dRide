@@ -1,4 +1,9 @@
-import { queryClient, queryNFTsByAddress } from './query';
+import { queryClient, queryNFTsRented, queryNFTsOwned } from './query';
+
+export enum QueryType {
+  owned,
+  rented
+}
 
 export const fetchAllNFTs = async (data: NFTData[]): Promise<NFTItem[]> => {
   return await Promise.all(
@@ -10,8 +15,8 @@ export const fetchAllNFTs = async (data: NFTData[]): Promise<NFTItem[]> => {
   );
 };
 
-export const fetchNFTsByAddress = async (address?: string): Promise<NFTItem[]> => {
-  const data = await queryClient.query(queryNFTsByAddress, { address: address?.toLowerCase() }).toPromise();
+export const fetchNFTsBy= async (type: QueryType, address?: string): Promise<NFTItem[]> => {
+  const data = await queryClient.query(type == QueryType.owned ? queryNFTsOwned : queryNFTsRented, { address: address?.toLowerCase() }).toPromise();
   return await Promise.all(
     data.data.tokens.map(async (item: NFTData) => {
       const res = await fetch(item.metadataURI);

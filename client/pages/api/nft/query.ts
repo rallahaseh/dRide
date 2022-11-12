@@ -1,6 +1,6 @@
 import { createClient } from 'urql';
 
-export const APIURL = process.env.GRAPH_URL ?? "";
+export const APIURL = process.env.NEXT_PUBLIC_GRAPH_URL!;
 
 export const queryAllNFTs = `
   query {
@@ -16,7 +16,26 @@ export const queryAllNFTs = `
   }
 `;
 
-export const queryNFTsByAddress = `
+export const queryNFTsRented = `
+  query UserToken ($address: String!) {
+    tokens(
+      orderBy: tokenID
+      orderDirection: desc
+      where: {
+        owner: $address
+      }
+    ) {
+      tokenID
+      ipfsCID
+      metadataURI
+      owner {
+        id
+      }
+    }
+  }
+`;
+
+export const queryNFTsOwned = `
   query UserToken ($address: String!) {
     tokens(
       orderBy: tokenID

@@ -9,8 +9,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
-    const { item, rentable } = props;
+    const { item, action } = props;
+
     const handleRentClick = () => {
+
+    };
+
+    const handleReturnVehicleClick = () => {
 
     };
 
@@ -37,20 +42,38 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button
-                    variant="contained"
-                    size="large"
-                    onClick={handleRentClick}
-                    disabled={rentable}
-                >
-                    Rent
-                </Button>
+                {
+                    action == ActionType.rent &&
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={handleRentClick}
+                    >
+                        Rent
+                    </Button>
+                }
+                {
+                    action == ActionType.unsubscribe &&
+                    <Button
+                        variant="contained"
+                        size="large"
+                        onClick={handleReturnVehicleClick}
+                    >
+                        Return Vehicle
+                    </Button>
+                }
             </CardActions>
         </Card>
     );
 };
 
+export enum ActionType {
+    rent,
+    unsubscribe,
+    none
+}
+
 interface NFTCardProps {
     item: NFTItem;
-    rentable?: boolean;
+    action: ActionType;
 }

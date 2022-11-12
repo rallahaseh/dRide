@@ -1,3 +1,3 @@
-export { fetchAllNFTs, fetchNFTsByAddress } from './nft/fetchNFT';
+export { fetchAllNFTs, fetchNFTsBy } from './nft/fetchNFT';
 export type { NFTData, NFTItem } from './nft/fetchNFT';
-export { queryClient, queryAllNFTs, queryNFTsByAddress } from './nft/query';
+export { queryClient, queryAllNFTs, queryNFTsOwned, queryNFTsRented } from './nft/query';
