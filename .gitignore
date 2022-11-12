@@ -32,3 +32,6 @@ yarn-error.log*
 
 # Next.JS
 .next
+
+# Graph Studio
+graph/*
