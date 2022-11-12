@@ -3,7 +3,7 @@ export interface Result {
     label: string;
 }
 
-interface Feature {
+export interface Feature {
     id: string;
     type: string;
     place_type: string[];

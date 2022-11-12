@@ -41,6 +41,7 @@ type Props = {
   showLoader?: boolean;
   focusOnMount?: boolean;
   onSelect: (param: any) => void;
+  onClear?: () => void;
   onSuggest?: (results: any[]) => void;
   onInputBlur?: (event: any) => void;
   onInputFocus?: (event: any) => void;
@@ -107,6 +108,7 @@ const Geocoder = ({
   language,
   suggestionsPaperProps,
   onSelect,
+  onClear,
   accessToken,
   onInputFocus,
   onInputBlur,
@@ -144,14 +146,14 @@ const Geocoder = ({
   }, [results, onSuggest]);
 
   const handleClearInput = useCallback(() => {
-    setValue('');
+    onClear && setValue('');
     // After clear button is clicked the input should be re-focused automatically.
     focusInput();
-  }, [focusInput]);
+  }, [focusInput, onClear]);
 
   const theme = useTheme();
 
-  
+
   const renderInput = useCallback(
 
     (renderInputProps: any) => {
