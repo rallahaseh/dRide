@@ -14,7 +14,7 @@ export const BasicLayout: FC<BasicLayoutProps> = (props: BasicLayoutProps) => {
             {/* Header */}
             <NavBar />
             {/* Body */}
-            <Container key={transitionKey}>
+            <Container key={transitionKey} style={{ paddingTop: "50px"}}>
                 {children}
             </Container>
             {/* Footer */}
