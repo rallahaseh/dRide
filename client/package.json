@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.13",
+    "@mui/x-date-pickers": "^5.0.8",
     "@next/font": "^13.0.3",
     "@rainbow-me/rainbowkit": "^0.7.4",
     "autosuggest-highlight": "^3.3.4",

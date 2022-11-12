@@ -46,6 +46,10 @@ export type NFTItem = NFTData & {
     type: string;
     size: number;
     datetime: number;
-  }
+  },
+  date: {
+    from: number,
+    to: number
+  },
   price: string;
 };
