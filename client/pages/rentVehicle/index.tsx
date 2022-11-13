@@ -1,7 +1,5 @@
-import { Fragment, useState } from 'react';
-import { fetchAllNFTs, NFTData, NFTItem, queryAllNFTs, queryClient } from '../api/index';
-import { InferGetServerSidePropsType, NextPage } from 'next';
-import { SWRConfig } from 'swr';
+import { useState } from 'react';
+import { NextPage } from 'next';
 import { SearchResult, SearchVehicle } from './search';
 import { Vehicle } from './rental-vehicles';
 import Box from '@mui/material/Box';
@@ -11,22 +9,13 @@ enum State {
   result
 }
 
-const IndexPage: NextPage<IndexPageProps> = (props: IndexPageProps) => {
-  const { fallback } = props;
+const IndexPage: NextPage = () => {
   const [state, setState] = useState<State>(State.search);
+  const [searchResult, setSearchResult] = useState<SearchResult>();
 
-  const onSearchClickedHandler = (searchResult: SearchResult) => {
+  const onSearchClickedHandler = (_searchResult: SearchResult) => {
     setState(State.result)
-    // const result = fallback.allnfts.filter((nft) => {
-    //   if (searchResult.location) {
-    //     let searchLocation = whichCountry[searchResult.location.center[0], searchResult.location.center[1]]
-    //     let nftLocation = whichCountry[nft.userLocation.latitude, nft.userLocation.longitude]
-    //     return (nft.date.from <= searchResult.date.from!) && (searchLocation == nftLocation);
-    //   } else {
-    //     return nft.date.from <= searchResult.date.from!;
-    //   }
-    // });
-    // console.log(result)
+    setSearchResult(_searchResult);
   }
 
   const SearchComponent = () => {
@@ -37,11 +26,7 @@ const IndexPage: NextPage<IndexPageProps> = (props: IndexPageProps) => {
 
   const VehiclesComponent = () => {
     return (
-      <Fragment>
-        <SWRConfig value={{ fallback }}>
-          <Vehicle />
-        </SWRConfig>
-      </Fragment>
+      <Vehicle result={searchResult} />
     );
   }
 
@@ -56,20 +41,5 @@ const IndexPage: NextPage<IndexPageProps> = (props: IndexPageProps) => {
     </Box>
   );
 };
-
-export const getServerSideProps = async () => {
-  const data = await queryClient.query(queryAllNFTs, {}).toPromise();
-  const response: NFTItem[] = await fetchAllNFTs(data.data.tokens as NFTData[]);
-
-  return {
-    props: {
-      fallback: {
-        allnfts: response
-      }
-    }
-  };
-};
-
-interface IndexPageProps extends InferGetServerSidePropsType<typeof getServerSideProps> { }
 
 export default IndexPage;
