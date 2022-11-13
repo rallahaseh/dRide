@@ -1,13 +1,15 @@
-import { queryClient, queryNFTsRented, queryNFTsOwned } from './query';
+import { queryClient, queryAvailableNFTs, queryNFTsRented, queryNFTsOwned } from './query';
 
 export enum QueryType {
   owned,
   rented
 }
 
-export const fetchAllNFTs = async (data: NFTData[]): Promise<NFTItem[]> => {
+export const fetchAvailableNFTs = async (address?: string): Promise<NFTItem[]> => {
+  const data = await queryClient.query(queryAvailableNFTs, { address: address?.toLowerCase() }).toPromise();
+  let tokens = data.data.mintedTokens;  
   return await Promise.all(
-    data.map(async (item: NFTData) => {
+    tokens.map(async (item: NFTData) => {
       if (item.ipfsCID.length > 0) {
         const res = await fetch(item.metadataURI);
         const json = await res.json();
@@ -50,7 +52,6 @@ export type NFTData = {
   tokenID: number;
   ipfsCID: string;
   metadataURI: string;
-  __typename: string;
 };
 
 export type NFTItem = NFTData & {

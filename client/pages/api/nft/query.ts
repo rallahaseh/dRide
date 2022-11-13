@@ -2,11 +2,14 @@ import { createClient } from 'urql';
 
 export const APIURL = process.env.NEXT_PUBLIC_GRAPH_URL!;
 
-export const queryAllNFTs = `
-  query {
+export const queryAvailableNFTs = `
+  query UserToken ($address: String!) {
     mintedTokens(
       orderBy: tokenID
       orderDirection: desc
+      where: {
+        owner_not: $address
+      }
     ) {
       tokenID
       ipfsCID
