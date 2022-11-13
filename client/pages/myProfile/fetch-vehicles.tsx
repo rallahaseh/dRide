@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import type { FC } from 'react';
 import { default as useSWR } from 'swr';
 import { useAccount } from 'wagmi';
-import { fetchNFTsBy, NFTItem } from '../api';
+import { fetchMintedNFTsBy, fetchRentedNFTsBy, NFTItem } from '../api';
 import { QueryType } from '../api/nft/fetchNFT';
 import { NFTCard } from '../../components';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -13,7 +13,9 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
     const { } = props;
 
     const { address } = useAccount();
-    const { data, error } = useSWR<NFTItem[]>(address, async () => await fetchNFTsBy(props.queryType, address));
+    const { data, error, isValidating } = useSWR<NFTItem[]>(address, async () =>
+        await (props.queryType == QueryType.owned) ? fetchMintedNFTsBy(address) : fetchRentedNFTsBy(address)
+    );
 
     if (error) {
         return (
@@ -23,7 +25,7 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
         );
     }
 
-    if (!data) return <CircularProgress />;
+    if (!data || isValidating) return <CircularProgress />;
 
     if (data.length === 0) {
         return (
@@ -36,7 +38,7 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
     return (
         <Fragment>
             {data.map((item) => (
-                <NFTCard key={item.tokenID} item={item} action={props.queryType == QueryType.owned ? ActionType.none : ActionType.unsubscribe} />
+                item && <NFTCard key={item.tokenID} item={item} action={props.queryType == QueryType.owned ? ActionType.none : ActionType.unsubscribe} />
             ))}
         </Fragment>
     );

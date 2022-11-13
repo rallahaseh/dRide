@@ -8,20 +8,40 @@ export enum QueryType {
 export const fetchAllNFTs = async (data: NFTData[]): Promise<NFTItem[]> => {
   return await Promise.all(
     data.map(async (item: NFTData) => {
-      const res = await fetch(item.metadataURI);
-      const json = await res.json();
-      return { ...json, ...item };
+      if (item.ipfsCID.length > 0) {
+        const res = await fetch(item.metadataURI);
+        const json = await res.json();
+        return { ...json, ...item };
+      }
     })
   );
 };
 
-export const fetchNFTsBy= async (type: QueryType, address?: string): Promise<NFTItem[]> => {
-  const data = await queryClient.query(type == QueryType.owned ? queryNFTsOwned : queryNFTsRented, { address: address?.toLowerCase() }).toPromise();
+export const fetchMintedNFTsBy = async (address?: string): Promise<NFTItem[]> => {
+  const data = await queryClient.query(queryNFTsOwned, { address: address?.toLowerCase() }).toPromise();
+  let tokens = data.data.mintedTokens;
   return await Promise.all(
-    data.data.tokens.map(async (item: NFTData) => {
-      const res = await fetch(item.metadataURI);
-      const json = await res.json();
-      return { ...json, ...item };
+    tokens.map(async (item: NFTData) => {
+      if (item.ipfsCID.length > 0) {
+        const res = await fetch(item.metadataURI);
+        const json = await res.json();
+        return { ...json, ...item };
+      }
+    })
+  );
+};
+
+export const fetchRentedNFTsBy = async (address?: string): Promise<NFTItem[]> => {
+  const data = await queryClient.query(queryNFTsRented, { address: address?.toLowerCase() }).toPromise();
+  let tokens = data.data.rentedTokens;
+  console.log(tokens);
+  return await Promise.all(
+    tokens.map(async (item: NFTData) => {
+      if (item.ipfsCID.length > 0) {
+        const res = await fetch(item.metadataURI);
+        const json = await res.json();
+        return { ...json, ...item };
+      }
     })
   );
 };
@@ -29,8 +49,8 @@ export const fetchNFTsBy= async (type: QueryType, address?: string): Promise<NFT
 export type NFTData = {
   tokenID: number;
   ipfsCID: string;
-  createdBy: string;
   metadataURI: string;
+  __typename: string;
 };
 
 export type NFTItem = NFTData & {
@@ -41,9 +61,9 @@ export type NFTItem = NFTData & {
     year: string;
   }
   userLocation: {
-    latitude: number;
-    longitude: number;
-    name: string;
+    latitude?: number;
+    longitude?: number;
+    name?: string;
   },
   thumbnail: {
     name: string;
