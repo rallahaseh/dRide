@@ -1,15 +1,20 @@
 import { FC } from 'react';
 import { NFTItem } from '../pages/api';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import {
+    Card,
+    CardHeader,
+    CardMedia,
+    CardContent,
+    CardActions,
+    Typography,
+    Button
+
+} from '@mui/material';
 
 export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     const { item, action } = props;
+    let fromDate = new Date(item.date?.from * 1000);
+    let toDate = new Date(item.date?.to * 1000);
 
     const handleRentClick = () => {
 
@@ -27,18 +32,16 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
             />
             <CardMedia
                 component="img"
-                src={`https://nftstorage.link/ipfs/${item.ipfsCID}/${item.thumbnail.name}`}
-                alt={item.thumbnail.originalName}
+                height="250"
+                image={`https://nftstorage.link/ipfs/${item.ipfsCID}/${item.thumbnail.name}`}
+                alt="nft-thumbnail"
             />
             <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                    {item.userLocation.name}
-                </Typography>
-                <Typography variant="h6" color="text.primary">
-                    Price
-                </Typography>
-                <Typography variant="body2" color="text.primary">
+                <Typography gutterBottom variant="h5" component="div">
                     {item.price + " €/day"}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {`Available Until: ${toDate?.toDateString()}`}
                 </Typography>
             </CardContent>
             <CardActions>
