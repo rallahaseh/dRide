@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/interfaces/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "./IERC4907.sol";
 
 contract Marketplace is ReentrancyGuard {
@@ -66,9 +67,10 @@ contract Marketplace is ReentrancyGuard {
     /// Events
     event NFTListed(
         address owner,
-        address user,
+        address renter,
         address nftContract,
         uint256 tokenId,
+        string tokenURI,
         uint256 pricePerDay,
         uint256 startDateUNIX,
         uint256 endDateUNIX,
@@ -82,9 +84,10 @@ contract Marketplace is ReentrancyGuard {
     );
     event NFTRented(
         address owner,
-        address user,
+        address renter,
         address nftContract,
         uint256 tokenId,
+        string tokenURI,
         uint256 startDateUNIX,
         uint256 endDateUNIX,
         uint64 expiryDate,
@@ -147,11 +150,14 @@ contract Marketplace is ReentrancyGuard {
         _nftsListed.increment();
         EnumerableSet.add(_nftContractTokensMap[nftContract], tokenId);
         EnumerableSet.add(_nftContracts, nftContract);
+        string memory _tokenURI = IERC721Metadata(nftContract).tokenURI(tokenId);
+
         emit NFTListed(
             IERC721(nftContract).ownerOf(tokenId),
             address(0),
             nftContract,
             tokenId,
+            _tokenURI,
             pricePerDay,
             startDateUNIX,
             endDateUNIX,
@@ -264,12 +270,14 @@ contract Marketplace is ReentrancyGuard {
         IERC4907(nftContract).setUser(tokenId, msg.sender, expiryDate); // Set owner
         listing.renter = msg.sender; // Set renter
         listing.expiryDate = expiryDate; // Set NFT expiry date
+        string memory _tokenURI = IERC721Metadata(nftContract).tokenURI(tokenId);
 
         emit NFTRented(
             IERC721(nftContract).ownerOf(tokenId),
             msg.sender,
             nftContract,
             tokenId,
+            _tokenURI,
             listing.startDateUNIX,
             listing.endDateUNIX,
             expiryDate,
