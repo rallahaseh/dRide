@@ -4,7 +4,7 @@
   "description": "Truffle project with rentable NFT contract",
   "main": "truffle-config.js",
   "dependencies": {
-    "@openzeppelin/contracts": "^4.7.3",
+    "@openzeppelin/contracts": "^4.8.0",
     "dotenv": "^16.0.2"
   },
   "scripts": {
