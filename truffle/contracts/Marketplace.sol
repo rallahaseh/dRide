@@ -284,7 +284,7 @@ contract Marketplace is ReentrancyGuard {
             "Could not proceed because there is not enough balance in your wallet to cover rental period"
         );
         uint256 txValue = value * 10 ** 6;
-        uint256 fee = txValue * _rentFee;
+        uint256 fee = txValue * (_rentFee / 100);
         amount = txValue - fee;
         stakingBalance[msg.sender] += amount;
         paymentToken.transferFrom(msg.sender, address(this), txValue);
