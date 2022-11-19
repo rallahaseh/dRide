@@ -6,9 +6,10 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/interfaces/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./IERC4907.sol";
 
-contract Warehouse is ReentrancyGuard {
+contract Marketplace is ReentrancyGuard {
     struct Listing {
         address owner;
         address renter;
@@ -23,6 +24,8 @@ contract Warehouse is ReentrancyGuard {
     mapping(address => mapping(uint256 => Listing)) private _listingMap;
     // Takes a list of tokens and converts NFT contracts into those tokens.
     mapping(address => EnumerableSet.UintSet) private _nftContractTokensMap;
+    // A list of staking for each user address
+    mapping(address => uint) private stakingBalance;
     // Monitors the nft contracts that have been posted on the website.
     EnumerableSet.AddressSet private _nftContracts;
 
@@ -32,7 +35,9 @@ contract Warehouse is ReentrancyGuard {
 
     /// Variables
     Counters.Counter private _nftsListed;
-    address private _warehouseOwner;
+    address private _marketplaceOwner;
+    uint8 private _rentFee;
+    address private _paymentTokenAddress;
 
     /// Modifiers
     modifier ownerOfIERC721(address nftContract, uint256 tokenId) {
@@ -86,8 +91,10 @@ contract Warehouse is ReentrancyGuard {
         uint256 rentalFee
     );
 
-    constructor() {
-        _warehouseOwner = msg.sender;
+    constructor(address paymentTokenAddress, uint8 rentFee) {
+        _marketplaceOwner = msg.sender;
+        _paymentTokenAddress = paymentTokenAddress;
+        _rentFee = rentFee;
     }
 
     /**
@@ -112,7 +119,7 @@ contract Warehouse is ReentrancyGuard {
         uint256 startDateUNIX,
         uint256 endDateUNIX
     )
-        public
+        external
         ownerOfIERC721(nftContract, tokenId)
         correctPrice(pricePerDay)
         validateStartDate(startDateUNIX)
@@ -153,7 +160,7 @@ contract Warehouse is ReentrancyGuard {
     }
 
     /// @dev A helper function for determining whether the token contract meets the standard.
-    function isRentableNFT(address nftContract) public view returns (bool) {
+    function isRentableNFT(address nftContract) private view returns (bool) {
         bool _isRentable = false;
         bool _isNFT = false;
         try
@@ -181,7 +188,7 @@ contract Warehouse is ReentrancyGuard {
      * @param tokenId  Generated token id
      */
     function unlistNFT(address nftContract, uint256 tokenId)
-        public
+        external
         payable
         nonReentrant
     {
@@ -191,21 +198,17 @@ contract Warehouse is ReentrancyGuard {
             "This NFT is not included in the list."
         );
         require(
-            listing.owner == msg.sender || _warehouseOwner == msg.sender,
-            "The request to delist NFT was denied."
+            listing.owner == msg.sender || _marketplaceOwner == msg.sender,
+            "The request to delist NFT was denied because you are the owner or not the renter of this NFT"
         );
         // The fee will be returned to the user if the listing is taken down before the end of the rental period,
         // but there will be no refund if there is no renter.
-        uint256 refund = 0;
+        uint256 refundAmount = 0;
         if (listing.renter != address(0)) {
             uint256 diff = listing.expiryDate - block.timestamp;
             uint256 perDiem = diff / 60 / 60 / 24 + 1;
-            refund = perDiem * listing.pricePerDay;
-            require(
-                msg.value >= refund,
-                "Could not proceed refund because there is not enough ETH in your wallet"
-            );
-            payable(listing.renter).transfer(refund);
+            refundAmount = perDiem * listing.pricePerDay;
+            refund(refundAmount, listing.renter);
         }
         // Remove user data
         IERC4907(nftContract).setUser(tokenId, address(0), 0);
@@ -216,7 +219,17 @@ contract Warehouse is ReentrancyGuard {
         }
         _nftsListed.decrement();
 
-        emit NFTUnlisted(msg.sender, nftContract, tokenId, refund);
+        emit NFTUnlisted(msg.sender, nftContract, tokenId, refundAmount);
+    }
+
+    function refund(uint256 value, address beneficiary) private returns (uint256 amount) {
+        ERC20 paymentToken = ERC20(_paymentTokenAddress);
+        require(
+            paymentToken.balanceOf(msg.sender) >= value,
+            "Could not proceed because there is not enough balance in your wallet to cover rental period"
+        );
+        amount = value;
+        paymentToken.transfer(beneficiary, amount);
     }
 
     /**
@@ -230,8 +243,9 @@ contract Warehouse is ReentrancyGuard {
     function rentNFT(
         address nftContract,
         uint256 tokenId,
+        uint64 startDate,
         uint64 expiryDate
-    ) public payable nonReentrant {
+    ) external payable nonReentrant {
         Listing storage listing = _listingMap[nftContract][tokenId];
         require(
             listing.renter == address(0) ||
@@ -243,13 +257,9 @@ contract Warehouse is ReentrancyGuard {
             "The rental period exceeds the maximum date rentable."
         );
         // Transfer rental fee
-        uint256 numDays = (expiryDate - block.timestamp) / 60 / 60 / 24 + 1; // Calculate number of days
+        uint256 numDays = (expiryDate - startDate) / 60 / 60 / 24 + 1; // Calculate number of days
         uint256 rentalFee = listing.pricePerDay * numDays; // Total amount of fees
-        require(
-            msg.value >= rentalFee,
-            "Could not proceed because there is not enough ETH in your wallet to cover rental period"
-        );
-        payable(listing.owner).transfer(rentalFee);
+        takeFee(rentalFee);
         // Update listing
         IERC4907(nftContract).setUser(tokenId, msg.sender, expiryDate); // Set owner
         listing.renter = msg.sender; // Set renter
@@ -267,6 +277,35 @@ contract Warehouse is ReentrancyGuard {
         );
     }
 
+    function takeFee(uint256 value) private returns (uint256 amount) {
+        ERC20 paymentToken = ERC20(_paymentTokenAddress);
+        require(
+            paymentToken.balanceOf(msg.sender) >= value,
+            "Could not proceed because there is not enough balance in your wallet to cover rental period"
+        );
+        uint256 txValue = value * 10 ** 6;
+        uint256 fee = txValue * (_rentFee / 100);
+        amount = txValue - fee;
+        stakingBalance[msg.sender] += amount;
+        paymentToken.transferFrom(msg.sender, address(this), txValue);
+    }
+
+    /**
+     * @notice Withdrawal user balance
+     * @dev Modifiers
+     * - To protect against reentrancy attacks
+     */
+     function withdrawal() external nonReentrant {
+        uint256 balance = stakingBalance[msg.sender];
+        require (
+            balance > 0, 
+            "Could not proceed because staking balance cannot be 0"
+        );
+        ERC20 paymentToken = ERC20(_paymentTokenAddress);
+        paymentToken.transfer(msg.sender, balance);
+        stakingBalance[msg.sender] = 0;
+     }
+
     /**
      * @notice Retreive the list of all listed NFTs
      * @dev This is function will be used only for testing
@@ -279,7 +318,7 @@ contract Warehouse is ReentrancyGuard {
      * This is something that should be kept in mind at all times.
      * 
      */
-    function getAllListings() public view returns (Listing[] memory) {
+    function getAllListings() external view returns (Listing[] memory) {
         Listing[] memory listings = new Listing[](_nftsListed.current());
         uint256 listingsIndex = 0;
         address[] memory nftContracts = EnumerableSet.values(_nftContracts);

@@ -1,4 +1,4 @@
-const Warehouse = artifacts.require("Warehouse");
+const Marketplace = artifacts.require("Marketplace");
 const NFT_CONTRACT = "0x209e693036FeaDfe6EdCa80438CF64A0FD4dD1Ca";
 const TOKEN_ID = 1;
 const PRICE = 1;
@@ -34,13 +34,13 @@ const ERC721_ABI = [
 
 const main = async (cb) => {
     try {
-        const warehouse = await Warehouse.deployed();
+        const marketplace = await Marketplace.deployed();
         const nftContract = new web3.eth.Contract(ERC721_ABI, NFT_CONTRACT);
         const expires = await nftContract.methods.userExpires(TOKEN_ID).call();
         let value = (Math.floor((expires - Date.now()/1000)/60/60/24 + 1)) * PRICE;
         const owner = await nftContract.methods.ownerOf(TOKEN_ID).call();
         let options = value < 0 ? {from: owner} : {from: owner, value: value};
-        let txn = await warehouse.unlistNFT(NFT_CONTRACT, TOKEN_ID, options);
+        let txn = await marketplace.unlistNFT(NFT_CONTRACT, TOKEN_ID, options);
         console.log(txn);
     } catch(err) {
         console.log(err);
