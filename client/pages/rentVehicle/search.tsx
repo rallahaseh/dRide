@@ -1,11 +1,16 @@
 import { FC, useState } from 'react';
 // MUI Components
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import {
+    Container,
+    Box,
+    Grid,
+    Avatar,
+    Typography,
+    Stack,
+    TextField,
+    Button
+} from '@mui/material';
+import DirectionsCarFilledTwoToneIcon from '@mui/icons-material/DirectionsCarFilledTwoTone';
 // Date picker
 import dayjs, { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -31,61 +36,86 @@ export const SearchVehicle: FC<SearchVehicleProps> = (props: SearchVehicleProps)
 
     return (
         <Container sx={{ p: 4 }} maxWidth="md">
-            <Typography variant="h3" component="h2">
-                Search for a vehicle
-            </Typography>
             <Box
-                justifyContent="center"
-                alignItems="center"
-                sx={{ p: 2, border: '1px dashed grey' }}
+                sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
             >
-                <Stack spacing={2}>
-                    <Stack direction="row" spacing={2} justifyContent="center">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                                label="From"
-                                value={fromDate}
-                                minDate={dayjs(today)}
-                                onChange={(newValue) => {
-                                    setFromDate(newValue);
-                                }}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                            <DatePicker
-                                label="To"
-                                value={toDate}
-                                disabled={!fromDate}
-                                minDate={fromDate}
-                                onChange={(newValue) => {
-                                    setToDate(newValue);
-                                }}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
-                    </Stack>
-                    <Geocoder
-                        inputPlaceholder="Search Address"
-                        accessToken={mboxAccessToken}
-                        onSelect={onSelectLocationHandler}
-                        onClear={() => { setAddress(null) }}
-                        showLoader={true}
-                    />
-                    <Button
-                        variant="contained"
-                        disabled={!toDate}
-                        onClick={() => {
-                            props.onSearchClickedHandler({
-                                date: {
-                                    from: fromDate?.unix()!,
-                                    to: toDate?.unix()!
-                                },
-                                location: address
-                            })
-                        }}
-                    >
-                        Search
-                    </Button>
-                </Stack>
+                <Grid container spacing={5}>
+                    <Grid item xs={12}>
+                        <Grid
+                            container
+                            spacing={1}
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
+                                <DirectionsCarFilledTwoToneIcon />
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                                Search for a Vehicle
+                            </Typography>
+                        </Grid>
+                        <Box
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{ p: 2, border: '2px dashed grey', borderRadius: '16px' }}
+                        >
+                            <Stack spacing={2}>
+                                <Stack direction="row" spacing={2} justifyContent="center">
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            label="From"
+                                            value={fromDate}
+                                            minDate={dayjs(today)}
+                                            onChange={(newValue) => {
+                                                setFromDate(newValue);
+                                            }}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
+                                        <DatePicker
+                                            label="To"
+                                            value={toDate}
+                                            disabled={!fromDate}
+                                            minDate={fromDate}
+                                            onChange={(newValue) => {
+                                                setToDate(newValue);
+                                            }}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
+                                    </LocalizationProvider>
+                                </Stack>
+                                <Geocoder
+                                    inputPlaceholder="Search Address"
+                                    accessToken={mboxAccessToken}
+                                    onSelect={onSelectLocationHandler}
+                                    onClear={() => { setAddress(null) }}
+                                    showLoader={true}
+                                />
+                                <Button
+                                    variant="contained"
+                                    disabled={!toDate}
+                                    onClick={() => {
+                                        props.onSearchClickedHandler({
+                                            date: {
+                                                from: fromDate?.unix()!,
+                                                to: toDate?.unix()!
+                                            },
+                                            location: address
+                                        })
+                                    }}
+                                >
+                                    Search
+                                </Button>
+                            </Stack>
+                        </Box>
+
+                    </Grid>
+                </Grid>
             </Box>
         </Container>
     );
