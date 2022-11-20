@@ -3,51 +3,46 @@ import { createClient } from 'urql';
 export const APIURL = process.env.NEXT_PUBLIC_GRAPH_URL!;
 
 export const queryAvailableNFTs = `
-  query UserToken ($address: String!) {
-    mintedTokens(
-      orderBy: tokenID
-      orderDirection: desc
-      where: {
-        owner_not: $address
-      }
-    ) {
-      tokenID
-      ipfsCID
-      metadataURI
-    }
+query User($address: String!) {
+  nftrenteds(orderBy: id, orderDirection: asc, where: { renter: $address }) {
+    tokenId
+    tokenURI
   }
+  nftlisteds(
+    orderBy: id
+    orderDirection: asc
+    where: { tokenURI_not: "", owner_not: $address }
+  ) {
+    tokenId
+    tokenURI
+  }
+}
 `;
 
 export const queryNFTsRented = `
-  query UserToken ($address: String!) {
-    rentedTokens(
-      orderBy: tokenID
-      orderDirection: desc
-      where: {
-        renter: $address
-      }
-    ) {
-      tokenID
-      ipfsCID
-      metadataURI
-    }
+query User($address: String!) {
+  nftrenteds(
+    orderBy: tokenId
+    orderDirection: desc
+    where: { tokenURI_not: "", renter: $address }
+  ) {
+    tokenId
+    tokenURI
   }
+}
 `;
 
 export const queryNFTsOwned = `
-  query UserToken ($address: String!) {
-    mintedTokens(
-      orderBy: tokenID
-      orderDirection: desc
-      where: {
-        owner: $address
-      }
-    ) {
-      tokenID
-      ipfsCID
-      metadataURI
-    }
+query User($address: String!) {
+  nftlisteds(
+    orderBy: tokenId
+    orderDirection: desc
+    where: { tokenURI_not: "", owner: $address }
+  ) {
+    tokenId
+    tokenURI
   }
+}
 `;
 
 export const queryClient = createClient({

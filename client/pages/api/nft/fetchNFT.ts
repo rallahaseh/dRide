@@ -7,51 +7,52 @@ export enum QueryType {
 
 export const fetchAvailableNFTs = async (address?: string): Promise<NFTItem[]> => {
   const data = await queryClient.query(queryAvailableNFTs, { address: address?.toLowerCase() }).toPromise();
-  let tokens = data.data.mintedTokens;  
+  let listedNFTs = data.data.nftlisteds;
+  let rentedNFTs = data.data.nftrenteds;
+  const difference = listedNFTs.filter((obj1: any) => {
+    return rentedNFTs.some((obj2: any) => {
+      return obj1.tokenId != obj2.tokenId
+    })
+  });
   return await Promise.all(
-    tokens.map(async (item: NFTData) => {
-      if (item.ipfsCID.length > 0) {
-        const res = await fetch(item.metadataURI);
-        const json = await res.json();
-        return { ...json, ...item };
-      }
+    difference.map(async (item: NFTData) => {
+      let url = `https://nftstorage.link/ipfs/${item.tokenURI}/metadata.json`;
+      const res = await fetch(url);
+      const json = await res.json();
+      return { ...json, ...item };
     })
   );
 };
 
-export const fetchMintedNFTsBy = async (address?: string): Promise<NFTItem[]> => {
+export const fetchListedNFTsBy = async (address?: string): Promise<NFTItem[]> => {
   const data = await queryClient.query(queryNFTsOwned, { address: address?.toLowerCase() }).toPromise();
-  let tokens = data.data.mintedTokens;
+  let tokens = data.data.nftlisteds;
   return await Promise.all(
     tokens.map(async (item: NFTData) => {
-      if (item.ipfsCID.length > 0) {
-        const res = await fetch(item.metadataURI);
-        const json = await res.json();
-        return { ...json, ...item };
-      }
+      let url = `https://nftstorage.link/ipfs/${item.tokenURI}/metadata.json`;
+      const res = await fetch(url);
+      const json = await res.json();
+      return { ...json, ...item };
     })
   );
 };
 
 export const fetchRentedNFTsBy = async (address?: string): Promise<NFTItem[]> => {
   const data = await queryClient.query(queryNFTsRented, { address: address?.toLowerCase() }).toPromise();
-  let tokens = data.data.rentedTokens;
-  console.log(tokens);
+  let tokens = data.data.nftrenteds;
   return await Promise.all(
     tokens.map(async (item: NFTData) => {
-      if (item.ipfsCID.length > 0) {
-        const res = await fetch(item.metadataURI);
-        const json = await res.json();
-        return { ...json, ...item };
-      }
+      let url = `https://nftstorage.link/ipfs/${item.tokenURI}/metadata.json`;
+      const res = await fetch(url);
+      const json = await res.json();
+      return { ...json, ...item };
     })
   );
 };
 
 export type NFTData = {
-  tokenID: number;
-  ipfsCID: string;
-  metadataURI: string;
+  tokenId: number;
+  tokenURI: string;
 };
 
 export type NFTItem = NFTData & {
