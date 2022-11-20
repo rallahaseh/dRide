@@ -7,14 +7,10 @@ import {
     CardContent,
     CardActions,
     Typography,
-    Button,
-    CircularProgress
+    Button
 
 } from '@mui/material';
 import { AlertDialog } from '.';
-// Web3
-import { useContractFunctions } from '../hooks/useContractFunctions';
-import { BigNumber } from 'ethers';
 
 export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     const [showAlert, setShowAlert] = useState<Boolean>(false);
@@ -22,12 +18,6 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
     const { item, action } = props;
     let fromDate = new Date(item.date?.from * 1000);
     let toDate = new Date(item.date?.to * 1000);
-    // Web3
-    const { rent, unlist, isLoading, onSuccess, onFailure, failure } = useContractFunctions(
-        BigNumber.from(item?.tokenID),
-        BigNumber.from(item?.date?.from),
-        BigNumber.from(item?.date?.to)
-    )
 
     const handleRentClick = () => {
         setShowAlert(true);
@@ -41,10 +31,12 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
         setShowAlert(false);
         switch (action) {
             case ActionType.rent: {
-                await rent();
+                if (!props.rentSelectionHandler) return;
+                props?.rentSelectionHandler();
             }
-            case ActionType.unsubscribe: {
-                await unlist();
+            case ActionType.unlist: {
+                if (!props.unlistSelectionHandler) return;
+                props?.unlistSelectionHandler();
             }
         }
     };
@@ -53,30 +45,8 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
         setShowAlert(false);
     };
 
-    if (isLoading) {
-        return (
-            <CircularProgress
-                color="primary"
-                size="lg"
-                value={50}
-                variant="determinate"
-            />
-        );
-    }
-
     return (
         <>
-            {
-                showAlert && onFailure &&
-                <AlertDialog
-                    title='Error'
-                    description={failure}
-                    primaryActionTitle='Yes'
-                    primaryAction={handleAlertAction}
-                    secondaryActionTitle='Cancel'
-                    secondaryAction={handleCloseAlert}
-                />
-            }
             {
                 showAlert && action == ActionType.rent &&
                 <AlertDialog
@@ -89,10 +59,10 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
                 />
             }
             {
-                showAlert && action == ActionType.unsubscribe &&
+                showAlert && action == ActionType.unlist &&
                 <AlertDialog
                     title='Return Vehicle'
-                    description='Are you sure you want to return this vehicle?'
+                    description='Are you sure you want to unlist this vehicle?'
                     primaryActionTitle='Yes'
                     primaryAction={handleAlertAction}
                     secondaryActionTitle='Cancel'
@@ -107,7 +77,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
                 <CardMedia
                     component="img"
                     height="250"
-                    image={`https://nftstorage.link/ipfs/${item.ipfsCID}/${item.thumbnail.name}`}
+                    image={`https://nftstorage.link/ipfs/${item.tokenURI}/${item.thumbnail.name}`}
                     alt="nft-thumbnail"
                 />
                 <CardContent>
@@ -130,7 +100,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
                         </Button>
                     }
                     {
-                        action == ActionType.unsubscribe &&
+                        action == ActionType.unlist &&
                         <Button
                             variant="contained"
                             size="large"
@@ -147,11 +117,14 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
 
 export enum ActionType {
     rent,
-    unsubscribe,
+    unlist,
     none
 }
 
 interface NFTCardProps {
     item: NFTItem;
     action: ActionType;
+
+    rentSelectionHandler?: () => void
+    unlistSelectionHandler?: () => void
 }
