@@ -42,6 +42,9 @@ query User($address: String!) {
     tokenId
     tokenURI
   }
+  nftunlisteds(orderBy: id, orderDirection: asc) {
+    tokenId
+  }
 }
 `;
 

@@ -26,9 +26,15 @@ export const fetchAvailableNFTs = async (address?: string): Promise<NFTItem[]> =
 
 export const fetchListedNFTsBy = async (address?: string): Promise<NFTItem[]> => {
   const data = await queryClient.query(queryNFTsOwned, { address: address?.toLowerCase() }).toPromise();
-  let tokens = data.data.nftlisteds;
+  let listedNFTs = data.data.nftlisteds;
+  let unlistedNFTs = data.data.nftunlisteds;
+  const difference = listedNFTs.filter((obj1: any) => {
+    return unlistedNFTs.some((obj2: any) => {
+      return obj1.tokenId != obj2.tokenId
+    })
+  });
   return await Promise.all(
-    tokens.map(async (item: NFTData) => {
+    difference.map(async (item: NFTData) => {
       let url = `https://nftstorage.link/ipfs/${item.tokenURI}/metadata.json`;
       const res = await fetch(url);
       const json = await res.json();
