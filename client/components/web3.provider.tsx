@@ -1,7 +1,7 @@
 import { FC, Fragment, ReactNode } from 'react';
 // RainbowKit
 import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultWallets, RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit';
+import { getDefaultWallets, RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';
 
@@ -29,7 +29,7 @@ export const Web3Provider: FC<Web3ProviderProps> = (props: Web3ProviderProps) =>
   return (
     <Fragment>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains} theme={lightTheme()} appInfo={{ appName: 'dRide' }}>
+        <RainbowKitProvider chains={chains} theme={darkTheme()} appInfo={{ appName: 'dRide' }}>
           {children}
         </RainbowKitProvider>
       </WagmiConfig>
