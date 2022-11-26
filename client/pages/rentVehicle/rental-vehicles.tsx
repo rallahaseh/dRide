@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import router from 'next/router';
 import { useAccount } from 'wagmi';
 import { default as useSWRImmutable } from 'swr';
@@ -17,6 +17,7 @@ import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from
 import { contractConfigurations } from '../../hooks/contractConfigurations';
 import { BigNumber } from 'ethers';
 import { StateAlert, StateType } from '../../components/state';
+import { signERC2612Permit } from 'eth-permit';
 
 interface RequestParams {
     price: BigNumber
@@ -25,8 +26,17 @@ interface RequestParams {
     endDate: BigNumber
 }
 
+interface ERC2612PermitMessage {
+    owner: string;
+    spender: string;
+    value: number | string;
+    nonce: number | string;
+    deadline: number | string;
+}
+
 export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
     const nftContract = `0x2EE2807276ee3B715071cdC22BcF2e0E78FD9Bfb`;
+    const token = `0xaF7f7d3bC41dc0ab220De52B91ebeB5D48E9f4c7`;
     const { result } = props;
     const { address } = useAccount();
     const { data, error, isValidating } = useSWRImmutable<NFTItem[]>(address, async () =>
@@ -51,6 +61,7 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
         }
     }, [data]);
     // Web3
+    const [permitMessage, setPermitMessage] = useState<ERC2612PermitMessage>()
     const [requestParams, setRequestParams] = useState<RequestParams>()
     // Rent an NFT
     const { config: rentNFTConfig } = usePrepareContractWrite({
@@ -84,6 +95,20 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
             router.push('/')
         }
     });
+    // Permit
+    useEffect(() => {
+        const callRequest = (async () => {
+            await rentNFT?.({
+                recklesslySetUnpreparedArgs: [
+                    nftContract,
+                    requestParams?.tokenID!,
+                    requestParams?.startDate!,
+                    requestParams?.endDate!
+                ]
+            })
+        })
+        callRequest()
+    }, [permitMessage])
 
     if (error) {
         return (
@@ -124,21 +149,27 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
                         rentSelectionHandler={async () => {
                             let startDate = result?.date.from!
                             let expiryDate = result?.date.to!
-                            const numDays = (expiryDate - startDate) / 60 / 60 / 24 + 1;
-                            await rentNFT?.({
-                                recklesslySetUnpreparedArgs: [
-                                    nftContract,
-                                    BigNumber.from(item.tokenId)!,
-                                    BigNumber.from(startDate)!,
-                                    BigNumber.from(expiryDate)!
-                                ] 
-                            })
+                            const numDays = (expiryDate - startDate) / 60 / 60 / 24 + 1
+                            const amount = BigNumber.from(item.price).mul(numDays)
                             setRequestParams({
                                 tokenID: BigNumber.from(item.tokenId),
-                                price: BigNumber.from(item.price).mul(numDays),
+                                price: amount,
                                 startDate: BigNumber.from(startDate),
                                 endDate: BigNumber.from(expiryDate)
                             })
+                            // ERC2612 Permit
+                            if (!address) { return }
+                            const transactionValue = BigNumber.from(amount).mul(10 ** 6).toNumber()
+                            const transactionDeadline = Date.now() + 20 * 60;
+                            const permitResult = await signERC2612Permit(
+                                window.ethereum,
+                                token,
+                                address,
+                                contractConfigurations.marketplace.address,
+                                transactionValue,
+                                transactionDeadline
+                            );
+                            setPermitMessage(permitResult)
                         }}
                     />
                 </Grid>
