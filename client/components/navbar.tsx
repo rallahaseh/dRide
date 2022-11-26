@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,10 +9,12 @@ import Menu from '@mui/material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import CarRentalIcon from '@mui/icons-material/CarRental';
+
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useNetwork } from 'wagmi'
 
 const pages = [{
   name: 'Rent Vehicle',
@@ -27,6 +29,12 @@ const pages = [{
 
 export function NavBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [unsupportedChain, setUnsupportedChain] = useState(false);
+  const { chain } = useNetwork()
+
+  useEffect(() => {
+    setUnsupportedChain(chain?.unsupported ?? false)
+  }, [chain])
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -58,43 +66,44 @@ export function NavBar() {
           >
             dRide
           </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Link href={page.href} textAlign="center" underline="none">{page.name}</Link>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          {unsupportedChain === false &&
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                }}
+              >
+                {pages.map((page) => (
+                  <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                    <Link href={page.href} textAlign="center" underline="none">{page.name}</Link>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          }
           <CarRentalIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -114,19 +123,20 @@ export function NavBar() {
           >
             dRide
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page.name}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                href={page.href}
-              >
-                {page.name}
-              </Button>
-            ))}
-          </Box>
-
+          {unsupportedChain === false &&
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              {pages.map((page) => (
+                <Button
+                  key={page.name}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  href={page.href}
+                >
+                  {page.name}
+                </Button>
+              ))}
+            </Box>
+          }
           <Box sx={{ flexGrow: 0 }}>
             <ConnectButton />
           </Box>
