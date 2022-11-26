@@ -1,104 +1,46 @@
-import * as React from 'react';
-import {
-  Container,
-  Paper,
-  Typography,
-  Grid,
-  Box,
-  Divider,
-  Link
-} from '@mui/material';
-
+import { Button } from '@mui/material';
+import Typography from './home/home.typography';
+import HomeLayout from './home/home.layout';
+import backgroundImage from '../public/background.jpg'
 
 export default function Home() {
   return (
-    <Container maxWidth="lg">
-      <Paper
-        sx={{
-          position: 'relative',
-          backgroundColor: 'grey.800',
-          color: '#fff',
-          mb: 4,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          backgroundImage: `url(https://littlevisuals.co/images/german.jpg)`,
-        }}
+    <HomeLayout
+      sxBackground={{
+        backgroundImage: `url(${backgroundImage.src})`,
+        backgroundColor: '#7fc7d9', // Average color of the background image.
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Increase the network loading priority of the background image. */}
+      <img
+        style={{ display: 'none' }}
+        src={backgroundImage.src}
+        alt="increase priority"
+      />
+      <Typography color="inherit" align="center" variant="h2" marked="center">
+        Upgrade your rides
+      </Typography>
+      <Typography
+        color="inherit"
+        align="center"
+        variant="h5"
+        sx={{ mb: 4, mt: { sx: 4, sm: 10 } }}
       >
-        {/* Increase the priority of the hero background image */}
-        {<img style={{ display: 'none' }} src={"https://littlevisuals.co/images/german.jpg"} alt={"bgImage"} />}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            backgroundColor: 'rgba(0,0,0,.3)',
-          }}
-        />
-        <Grid container>
-          <Grid item md={6}>
-            <Box
-              sx={{
-                position: 'relative',
-                p: { xs: 3, md: 6 },
-                pr: { md: 0 },
-              }}
-            >
-              <Typography component="h1" variant="h3" color="inherit" gutterBottom>
-                dRide
-              </Typography>
-              <Typography variant="h5" color="inherit" paragraph>
-                A new expirence to share your ride ...
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
-      <Grid container spacing={5} sx={{ mt: 3 }}>
-        <Grid
-          item
-          xs={12}
-          md={12}
-          sx={{
-            '& .markdown': {
-              py: 3,
-            },
-          }}
-        >
-          <Typography variant="h4" gutterBottom>
-            Decentralized Carsharing System
-          </Typography>
-          <Divider />
-          <Typography variant="body1" gutterBottom padding={2}>
-            A decentralized car-sharing system using smart contracts.
-          </Typography>
-        </Grid>
-      </Grid>
-      <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
-        <Container maxWidth="lg">
-          <Typography variant="h6" align="center" gutterBottom>
-            dRide
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            color="text.secondary"
-            component="p"
-          >
-            dApp for carsharing smart contract
-          </Typography>
-          <Typography variant="body2" color="text.secondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="/">
-              rallahaseh
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
-        </Container>
-      </Box>
-    </Container>
+        Enjoy secret offers up to -70% off the best luxury cars every Sunday.
+      </Typography>
+      <Button
+        variant="contained"
+        size="large"
+        component="a"
+        href="/rentVehicle"
+        sx={{ minWidth: 200 }}
+      >
+        Start Now
+      </Button>
+      <Typography variant="body2" color="inherit" sx={{ mt: 2 }}>
+        Discover the experience
+      </Typography>
+    </HomeLayout>
   );
 }
