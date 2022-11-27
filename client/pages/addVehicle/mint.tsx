@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 // MUI Icons
 import DateRangeIcon from '@mui/icons-material/DateRange';
-import EuroIcon from '@mui/icons-material/Euro';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ImageIcon from '@mui/icons-material/Image';
 // Date picker
 import dayjs, { Dayjs } from 'dayjs';
@@ -307,7 +307,7 @@ const MintVehicle: FC<MintVehicleProps> = (props: MintVehicleProps) => {
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <EuroIcon />
+                                        <AttachMoneyIcon />
                                     </InputAdornment>
                                 ),
                             }}

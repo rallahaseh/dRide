@@ -82,7 +82,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        {item.price + " €/day"}
+                        {item.price + " $/day"}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         {`Available Until: ${toDate?.toDateString()}`}
