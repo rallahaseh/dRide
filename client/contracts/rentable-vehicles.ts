@@ -1,4 +1,4 @@
-export const address = `0x2EE2807276ee3B715071cdC22BcF2e0E78FD9Bfb`;
+export const address = `0xdC03f2784fb00C61fb06d348ec1b75F0B9819609`;
 
 export const abi = [
     {
@@ -196,7 +196,11 @@ export const abi = [
             "type": "string"
         }],
         "name": "mint",
-        "outputs": [],
+        "outputs": [{
+            "internalType": "uint256",
+            "name": "tokenID",
+            "type": "uint256"
+        }],
         "stateMutability": "nonpayable",
         "type": "function"
     }, {

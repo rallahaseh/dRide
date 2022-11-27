@@ -1,4 +1,4 @@
-export const address = `0x8D640D36Ac8b777C2df9686983903137623448db`;
+export const address = `0x4D95b0Cde53616862fBa18653F1F46c84D687177`;
 
 export const abi = [
     {
@@ -102,9 +102,9 @@ export const abi = [
             "type": "uint256"
         }, {
             "indexed": false,
-            "internalType": "uint64",
+            "internalType": "uint256",
             "name": "expiryDate",
-            "type": "uint64"
+            "type": "uint256"
         }, {
             "indexed": false,
             "internalType": "uint256",
@@ -138,6 +138,16 @@ export const abi = [
         }],
         "name": "NFTUnlisted",
         "type": "event"
+    }, {
+        "inputs": [],
+        "name": "contractBalance",
+        "outputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+        }],
+        "stateMutability": "view",
+        "type": "function"
     }, {
         "inputs": [],
         "name": "getAllListings",
@@ -224,6 +234,22 @@ export const abi = [
             "internalType": "uint64",
             "name": "expiryDate",
             "type": "uint64"
+        }, {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+        }, {
+            "internalType": "uint8",
+            "name": "v",
+            "type": "uint8"
+        }, {
+            "internalType": "bytes32",
+            "name": "r",
+            "type": "bytes32"
+        }, {
+            "internalType": "bytes32",
+            "name": "s",
+            "type": "bytes32"
         }],
         "name": "rentNFT",
         "outputs": [],
@@ -245,7 +271,13 @@ export const abi = [
         "type": "function"
     }, {
         "inputs": [],
-        "name": "withdrawal",
+        "name": "withdrawalContractBalance",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }, {
+        "inputs": [],
+        "name": "withdrawalUserBalance",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
