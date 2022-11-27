@@ -25,15 +25,16 @@ contract RentableVehicles is ERC4907 {
      * @dev Minting an NFT refers to converting digital files into crypto collections
      * or digital assets stored on the blockchain.
      */
-    function mint(string memory _tokenURI) external {
+    function mint(string memory _tokenURI) external returns (uint256 tokenID) {
         _tokenIds.increment();
-        uint256 newTokenId = _tokenIds.current();
-        _safeMint(msg.sender, newTokenId);
+        tokenID = _tokenIds.current();
+        _safeMint(msg.sender, tokenID);
         setApprovalForAll(_marketplaceContract, true);
-        _setTokenURI(newTokenId, _tokenURI);
-        tokenURIs[newTokenId] = _tokenURI;
+        _setTokenURI(tokenID, _tokenURI);
+        tokenURIs[tokenID] = _tokenURI;
         
-        emit mintedNFT(newTokenId, _tokenURI, block.timestamp);
+        emit mintedNFT(tokenID, _tokenURI, block.timestamp);
+        return tokenID;
     }
 
     /**
