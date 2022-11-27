@@ -6,9 +6,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/interfaces/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "./interfaces/IERC4907.sol";
+import "./interfaces/IERC20WithPermit.sol";
 
 contract Marketplace is ReentrancyGuard {
     struct Listing {
@@ -26,7 +26,7 @@ contract Marketplace is ReentrancyGuard {
     // Takes a list of tokens and converts NFT contracts into those tokens.
     mapping(address => EnumerableSet.UintSet) private _nftContractTokensMap;
     // A list of staking for each user address
-    mapping(address => uint) private stakingBalance;
+    mapping(address => uint256) private stakingBalance;
     // Monitors the nft contracts that have been posted on the website.
     EnumerableSet.AddressSet private _nftContracts;
 
@@ -38,7 +38,7 @@ contract Marketplace is ReentrancyGuard {
     Counters.Counter private _nftsListed;
     address private _marketplaceOwner;
     uint8 private _rentFee;
-    address private _paymentTokenAddress;
+    IERC20WithPermit private _paymentToken;
 
     /// Modifiers
     modifier ownerOfIERC721(address nftContract, uint256 tokenId) {
@@ -53,7 +53,10 @@ contract Marketplace is ReentrancyGuard {
         _;
     }
     modifier validateStartDate(uint256 date) {
-        require(date >= block.timestamp, "The beginning date cannot be in the past.");
+        require(
+            date >= block.timestamp,
+            "The beginning date cannot be in the past."
+        );
         _;
     }
     modifier validateEndDate(uint256 startDate, uint256 endDate) {
@@ -90,13 +93,13 @@ contract Marketplace is ReentrancyGuard {
         string tokenURI,
         uint256 startDateUNIX,
         uint256 endDateUNIX,
-        uint64 expiryDate,
+        uint256 expiryDate,
         uint256 rentalFee
     );
 
     constructor(address paymentTokenAddress, uint8 rentFee) {
         _marketplaceOwner = msg.sender;
-        _paymentTokenAddress = paymentTokenAddress;
+        _paymentToken = IERC20WithPermit(paymentTokenAddress);
         _rentFee = rentFee;
     }
 
@@ -211,10 +214,13 @@ contract Marketplace is ReentrancyGuard {
         // but there will be no refund if there is no renter.
         uint256 refundAmount = 0;
         if (listing.renter != address(0)) {
-            uint256 diff = listing.expiryDate - block.timestamp;
-            uint256 perDiem = diff / 60 / 60 / 24 + 1;
-            refundAmount = perDiem * listing.pricePerDay;
-            refund(refundAmount, listing.renter);
+            uint256 difference = listing.expiryDate - block.timestamp;
+            uint256 perDiem = difference / 60 / 60 / 24;
+            if (perDiem > 0) {
+                refundAmount = perDiem * listing.pricePerDay;
+                uint256 transactionValue = refundAmount * 10 ** 6; // Convert to dollars
+                refund(transactionValue, listing.renter);
+            }
         }
         // Remove user data
         IERC4907(nftContract).setUser(tokenId, address(0), 0);
@@ -229,13 +235,12 @@ contract Marketplace is ReentrancyGuard {
     }
 
     function refund(uint256 value, address beneficiary) private returns (uint256 amount) {
-        ERC20 paymentToken = ERC20(_paymentTokenAddress);
         require(
-            paymentToken.balanceOf(msg.sender) >= value,
+            _paymentToken.balanceOf(msg.sender) >= value,
             "Could not proceed because there is not enough balance in your wallet to cover rental period"
         );
         amount = value;
-        paymentToken.transfer(beneficiary, amount);
+        _paymentToken.transfer(beneficiary, amount);
     }
 
     /**
@@ -245,12 +250,23 @@ contract Marketplace is ReentrancyGuard {
      * @param nftContract  Contract address
      * @param tokenId  Generated token id
      * @param expiryDate  Rental period
+     *
+     * Permit specs
+     * // https://eips.ethereum.org/EIPS/eip-2612
+     * @param deadline  blocktime for validity
+     * @param v  secp256k1 (signature from owner of the message)
+     * @param r  secp256k1 (signature from owner of the message)
+     * @param s  secp256k1 (signature from owner of the message)
      */
     function rentNFT(
         address nftContract,
         uint256 tokenId,
         uint64 startDate,
-        uint64 expiryDate
+        uint64 expiryDate,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
     ) external payable nonReentrant {
         Listing storage listing = _listingMap[nftContract][tokenId];
         require(
@@ -263,9 +279,10 @@ contract Marketplace is ReentrancyGuard {
             "The rental period exceeds the maximum date rentable."
         );
         // Transfer rental fee
-        uint256 numDays = (expiryDate - startDate) / 60 / 60 / 24 + 1; // Calculate number of days
+        uint256 numDays = (expiryDate - startDate) / 60 / 60 / 24; // Calculate number of days
         uint256 rentalFee = listing.pricePerDay * numDays; // Total amount of fees
-        takeFee(rentalFee);
+        uint256 transactionValue = rentalFee * 10 ** 6; // Convert to dollars
+        safeTransfer(listing.owner, transactionValue, deadline, v, r, s);
         // Update listing
         IERC4907(nftContract).setUser(tokenId, msg.sender, expiryDate); // Set owner
         listing.renter = msg.sender; // Set renter
@@ -280,39 +297,10 @@ contract Marketplace is ReentrancyGuard {
             _tokenURI,
             listing.startDateUNIX,
             listing.endDateUNIX,
-            expiryDate,
+            listing.expiryDate,
             rentalFee
         );
     }
-
-    function takeFee(uint256 value) private returns (uint256 amount) {
-        ERC20 paymentToken = ERC20(_paymentTokenAddress);
-        require(
-            paymentToken.balanceOf(msg.sender) >= value,
-            "Could not proceed because there is not enough balance in your wallet to cover rental period"
-        );
-        uint256 txValue = value * 10 ** 6;
-        uint256 fee = txValue * (_rentFee / 100);
-        amount = txValue - fee;
-        stakingBalance[msg.sender] += amount;
-        paymentToken.transferFrom(msg.sender, address(this), txValue);
-    }
-
-    /**
-     * @notice Withdrawal user balance
-     * @dev Modifiers
-     * - To protect against reentrancy attacks
-     */
-     function withdrawal() external nonReentrant {
-        uint256 balance = stakingBalance[msg.sender];
-        require (
-            balance > 0, 
-            "Could not proceed because staking balance cannot be 0"
-        );
-        ERC20 paymentToken = ERC20(_paymentTokenAddress);
-        paymentToken.transfer(msg.sender, balance);
-        stakingBalance[msg.sender] = 0;
-     }
 
     /**
      * @notice Retreive the list of all listed NFTs
@@ -330,14 +318,101 @@ contract Marketplace is ReentrancyGuard {
         Listing[] memory listings = new Listing[](_nftsListed.current());
         uint256 listingsIndex = 0;
         address[] memory nftContracts = EnumerableSet.values(_nftContracts);
-        for (uint i = 0; i < nftContracts.length; i++) {
+        for (uint256 i = 0; i < nftContracts.length; i++) {
             address nftAddress = nftContracts[i];
             uint256[] memory tokens = EnumerableSet.values(_nftContractTokensMap[nftAddress]);
-            for (uint j = 0; j < tokens.length; j++) {
+            for (uint256 j = 0; j < tokens.length; j++) {
                 listings[listingsIndex] = _listingMap[nftAddress][tokens[j]];
                 listingsIndex++;
             }
         }
         return listings;
+    }
+
+    //      .-.     .-.     .-.     .-.     .-.     .-.     .-.     .-.     .-.     .-.
+    // `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'
+    //                              Transactions Functionalities
+    //      .-.     .-.     .-.     .-.     .-.     .-.     .-.     .-.     .-.     .-.
+    // `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'   `._.'
+    
+    /**
+     * @notice Safe transfer from sender to recipient using eip-2612 permit extension
+     * @dev Modifiers
+     * - To protect against reentrancy attacks
+     */
+    function safeTransfer(
+        address recipient,
+        uint256 value,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) private returns (uint256 txValue) {
+        require(
+            _paymentToken.balanceOf(msg.sender) >= value,
+            "Could not proceed because there is not enough balance in your wallet to cover rental period"
+        );
+        // Permit
+        _paymentToken.permit(
+            msg.sender,
+            address(this),
+            value,
+            deadline,
+            v,
+            r,
+            s
+        );
+        // Safe transfer from
+        _paymentToken.transferFrom(msg.sender, address(this), value);
+        // Staking balance
+        uint256 fee = value * (_rentFee / 100);
+        uint256 recipientTransaction = value - fee;
+        stakingBalance[recipient] += recipientTransaction;
+        stakingBalance[address(this)] += fee;
+
+        txValue = recipientTransaction;
+        return txValue;
+    }
+
+    /**
+     * @notice Withdrawal contract balance
+     * @dev Modifiers
+     * - To protect against reentrancy attacks
+     */
+    function withdrawalContractBalance() external nonReentrant {
+        // Check if sender is marketplace owner
+        require(
+            msg.sender == _marketplaceOwner,
+            "User does not have permission to withdraw, you should be marketplace owner"
+        );
+        // Get user balance
+        uint256 balance = stakingBalance[address(this)];
+        require(
+            balance > 0,
+            "Could not proceed because there is not enough balance in contract wallet"
+        );
+        // Transfer contract balance
+        _paymentToken.transfer(msg.sender, balance);
+        // Update stacking balance of the user
+        stakingBalance[address(this)] = 0;
+    }
+
+    function contractBalance() external view returns (uint256) {
+        return stakingBalance[address(this)];
+    }
+
+    /**
+     * @notice Withdrawal user balance
+     * @dev Modifiers
+     * - To protect against reentrancy attacks
+     */
+    function withdrawalUserBalance() external nonReentrant {
+        uint256 userBalance = stakingBalance[msg.sender];
+        require(
+            userBalance > 0,
+            "Could not proceed because staking balance cannot be 0"
+        );
+        _paymentToken.transfer(msg.sender, userBalance);
+        stakingBalance[msg.sender] = 0;
     }
 }
