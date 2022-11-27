@@ -69,9 +69,9 @@ module.exports = {
       provider: () =>
         new HDWalletProvider({
           mnemonic: {
-            phrase: process.env.MNEMONIC_PHRASE
+            phrase: process.env.MNEMONIC
           },
-          providerOrUrl: `https://goerli.infura.io/v3/${process.env.INFURA_ETH_API_KEY}`,
+          providerOrUrl: `wss://goerli.infura.io/ws/v3/${process.env.INFURA_KEY}`,
           numberOfAddresses: 1,
           shareNonce: true,
         }),
