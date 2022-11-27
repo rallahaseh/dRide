@@ -24,19 +24,13 @@ interface RequestParams {
     tokenID: BigNumber
     startDate: BigNumber
     endDate: BigNumber
-}
-
-interface ERC2612PermitMessage {
-    owner: string;
-    spender: string;
-    value: number | string;
-    nonce: number | string;
-    deadline: number | string;
+    deadline: BigNumber
+    v: number
+    r: string
+    s: string
 }
 
 export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
-    const nftContract = `0x2EE2807276ee3B715071cdC22BcF2e0E78FD9Bfb`;
-    const token = `0xaF7f7d3bC41dc0ab220De52B91ebeB5D48E9f4c7`;
     const { result } = props;
     const { address } = useAccount();
     const { data, error, isValidating } = useSWRImmutable<NFTItem[]>(address, async () =>
@@ -61,17 +55,20 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
         }
     }, [data]);
     // Web3
-    const [permitMessage, setPermitMessage] = useState<ERC2612PermitMessage>()
     const [requestParams, setRequestParams] = useState<RequestParams>()
     // Rent an NFT
     const { config: rentNFTConfig } = usePrepareContractWrite({
         ...contractConfigurations.marketplace,
         functionName: 'rentNFT',
         args: [
-            nftContract,
+            `0x${contractConfigurations.rentableVehicles.address.slice(2)}`,
             requestParams?.tokenID!,
             requestParams?.startDate!,
-            requestParams?.endDate!
+            requestParams?.endDate!,
+            requestParams?.deadline!,
+            requestParams?.v!,
+            `0x${requestParams?.r.slice(2)}`,
+            `0x${requestParams?.s.slice(2)}`,
         ]
     });
     const {
@@ -100,15 +97,19 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
         const callRequest = (async () => {
             await rentNFT?.({
                 recklesslySetUnpreparedArgs: [
-                    nftContract,
+                    `0x${contractConfigurations.rentableVehicles.address.slice(2)}`,
                     requestParams?.tokenID!,
                     requestParams?.startDate!,
-                    requestParams?.endDate!
+                    requestParams?.endDate!,
+                    requestParams?.deadline!,
+                    requestParams?.v!,
+                    `0x${requestParams?.r.slice(2)}`,
+                    `0x${requestParams?.s.slice(2)}`,
                 ]
             })
         })
         callRequest()
-    }, [permitMessage])
+    }, [requestParams])
 
     if (error) {
         return (
@@ -149,27 +150,30 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
                         rentSelectionHandler={async () => {
                             let startDate = result?.date.from!
                             let expiryDate = result?.date.to!
-                            const numDays = (expiryDate - startDate) / 60 / 60 / 24 + 1
+                            const numDays = (expiryDate - startDate) / 60 / 60 / 24
                             const amount = BigNumber.from(item.price).mul(numDays)
-                            setRequestParams({
-                                tokenID: BigNumber.from(item.tokenId),
-                                price: amount,
-                                startDate: BigNumber.from(startDate),
-                                endDate: BigNumber.from(expiryDate)
-                            })
                             // ERC2612 Permit
                             if (!address) { return }
                             const transactionValue = BigNumber.from(amount).mul(10 ** 6).toNumber()
                             const transactionDeadline = Date.now() + 20 * 60;
                             const permitResult = await signERC2612Permit(
                                 window.ethereum,
-                                token,
+                                contractConfigurations.tokens.usdc.address,
                                 address,
                                 contractConfigurations.marketplace.address,
                                 transactionValue,
                                 transactionDeadline
                             );
-                            setPermitMessage(permitResult)
+                            setRequestParams({
+                                tokenID: BigNumber.from(item.tokenId),
+                                price: amount,
+                                startDate: BigNumber.from(startDate),
+                                endDate: BigNumber.from(expiryDate),
+                                deadline: BigNumber.from(permitResult.deadline),
+                                v: permitResult.v,
+                                r: permitResult.r,
+                                s: permitResult.s
+                            })
                         }}
                     />
                 </Grid>

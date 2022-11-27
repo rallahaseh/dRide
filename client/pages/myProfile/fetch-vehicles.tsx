@@ -15,7 +15,6 @@ import { BigNumber } from 'ethers';
 export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
     const { queryType } = props;
 
-    const nftContract = `0x2EE2807276ee3B715071cdC22BcF2e0E78FD9Bfb`;
     const [tokenID, setTokenID] = useState<BigNumber>();
     const { address } = useAccount();
     const { data, error, isValidating } = useSWRImmutable<NFTItem[]>(address, async () =>
@@ -28,7 +27,7 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
         ...contractConfigurations.marketplace,
         functionName: 'unlistNFT',
         args: [
-            nftContract,
+            `0x${contractConfigurations.rentableVehicles.address.slice(2)}`,
             tokenID!
         ]
     });
@@ -57,7 +56,7 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
         const callRequest = async () => {
             await unlistNFT?.({
                 recklesslySetUnpreparedArgs: [
-                    nftContract,
+                    `0x${contractConfigurations.rentableVehicles.address.slice(2)}`,
                     tokenID!
                 ]
             })

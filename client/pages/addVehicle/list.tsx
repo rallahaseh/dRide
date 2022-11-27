@@ -20,7 +20,6 @@ interface ListVehicleProps {
 }
 
 const ListVehicle: FC<ListVehicleProps> = (props: ListVehicleProps) => {
-    const nftContract = `0x2EE2807276ee3B715071cdC22BcF2e0E78FD9Bfb`;
     const [checked, setChecked] = useState(false);
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
@@ -32,7 +31,7 @@ const ListVehicle: FC<ListVehicleProps> = (props: ListVehicleProps) => {
         ...contractConfigurations.marketplace,
         functionName: 'listNFT',
         args: [
-            nftContract,
+            `0x${contractConfigurations.rentableVehicles.address.slice(2)}`,
             props.metadata.tokenID!,
             props.metadata.pricePerDay!,
             props.metadata.startDate.add(10 * 60),
