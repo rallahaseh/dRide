@@ -73,7 +73,13 @@ export const SearchVehicle: FC<SearchVehicleProps> = (props: SearchVehicleProps)
                                             value={fromDate}
                                             minDate={dayjs(today)}
                                             onChange={(newValue) => {
-                                                setFromDate(newValue);
+                                                const date = new Date();
+                                                const hour = date.getHours();
+                                                const minutes = date.getMinutes();
+                                                const selectedDate = dayjs(newValue)
+                                                    .set('hour', hour)
+                                                    .set('minute', minutes)
+                                                setFromDate(selectedDate);
                                             }}
                                             renderInput={(params) => <TextField {...params} />}
                                         />
@@ -81,9 +87,15 @@ export const SearchVehicle: FC<SearchVehicleProps> = (props: SearchVehicleProps)
                                             label="To"
                                             value={toDate}
                                             disabled={!fromDate}
-                                            minDate={fromDate}
+                                            minDate={dayjs(fromDate).add(1, 'day')}
                                             onChange={(newValue) => {
-                                                setToDate(newValue);
+                                                const date = new Date();
+                                                const hour = date.getHours();
+                                                const minutes = date.getMinutes();
+                                                const selectedDate = dayjs(newValue)
+                                                    .set('hour', hour)
+                                                    .set('minute', minutes)
+                                                setToDate(selectedDate);
                                             }}
                                             renderInput={(params) => <TextField {...params} />}
                                         />

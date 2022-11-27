@@ -35,7 +35,7 @@ const ListVehicle: FC<ListVehicleProps> = (props: ListVehicleProps) => {
             nftContract,
             props.metadata.tokenID!,
             props.metadata.pricePerDay!,
-            props.metadata.startDate!,
+            props.metadata.startDate.add(10 * 60),
             props.metadata.endDate!,
         ]
     });
