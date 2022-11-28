@@ -1,0 +1,52 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: RentableVehicles
+    network: goerli
+    source:
+      address: "0xdC03f2784fb00C61fb06d348ec1b75F0B9819609"
+      abi: RentableVehicles
+      startBlock: 8031986
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - User
+      abis:
+        - name: RentableVehicles
+          file: ./abis/RentableVehicles.json
+      eventHandlers:
+        - event: burntNFT(uint256)
+          handler: handleBurntNFT
+        - event: mintedNFT(uint256,string,uint256)
+          handler: handleMintedNFT
+      file: ./src/mapping.ts
+  - kind: ethereum
+    name: Marketplace
+    network: goerli
+    source:
+      address: "0x4D95b0Cde53616862fBa18653F1F46c84D687177"
+      abi: Marketplace
+      startBlock: 8031985
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - User
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: NFTListed(address,address,address,uint256,string,uint256,uint256,uint256,uint256)
+          handler: handleListedNFT
+        - event: NFTRented(address,address,address,uint256,string,uint256,uint256,uint256,uint256)
+          handler: handleRentedNFT
+        - event: NFTUnlisted(address,address,uint256,uint256)
+          handler: handleUnlistedNFT
+      file: ./src/mapping.ts
