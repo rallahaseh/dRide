@@ -2,51 +2,75 @@ import { createClient } from 'urql';
 
 export const APIURL = process.env.NEXT_PUBLIC_GRAPH_URL!;
 
-export const queryAvailableNFTs = `
-query User($address: String!) {
-  nftrenteds(orderBy: id, orderDirection: asc, where: { renter: $address }) {
-    tokenId
-    tokenURI
-  }
-  nftlisteds(
-    orderBy: id
-    orderDirection: asc
-    where: { tokenURI_not: "", owner_not: $address }
-  ) {
-    tokenId
-    tokenURI
+export const queryUserData = `
+query getDataFor($userAddress: String!) {
+  user(orderBy: id, orderDirection: desc, id: $userAddress) {
+    mintedTokens(
+      orderBy: id
+      orderDirection: desc
+      where: { creator: $userAddress }
+    ) {
+      id
+      tokenID
+      contentURI
+      metadataURI
+      creationDate
+      creator {
+        id
+      }
+    }
+    listedTokens(
+      orderBy: id
+      orderDirection: desc
+      where: { owner: $userAddress }
+    ) {
+      id
+      tokenID
+      contentURI
+      metadataURI
+      creationDate
+      creator {
+        id
+      }
+      owner {
+        id
+      }
+    }
+    rentedTokens(
+      orderBy: id
+      orderDirection: desc
+      where: { renter: $userAddress }
+    ) {
+      id
+      tokenID
+      contentURI
+      metadataURI
+      creationDate
+      creator {
+        id
+      }
+      owner {
+        id
+      }
+      renter {
+        id
+      }
+    }
   }
 }
-`;
+`
 
-export const queryNFTsRented = `
-query User($address: String!) {
-  nftrenteds(
-    orderBy: tokenId
-    orderDirection: desc
-    where: { tokenURI_not: "", renter: $address }
-  ) {
-    tokenId
-    tokenURI
+export const queryTokensList = `
+query {
+  tokens(orderBy: id, orderDirection: desc, where: { renter: null }) {
+    id
+    tokenID
+    contentURI
+    metadataURI
+    creationDate
   }
 }
-`;
-
-export const queryNFTsOwned = `
-query User($address: String!) {
-  nftlisteds(
-    orderBy: tokenId
-    orderDirection: desc
-    where: { tokenURI_not: "", owner: $address }
-  ) {
-    tokenId
-    tokenURI
-  }
-  nftunlisteds(orderBy: id, orderDirection: asc) {
-    tokenId
-  }
-}
-`;
+`
 
 export const queryClient = createClient({
   url: APIURL
