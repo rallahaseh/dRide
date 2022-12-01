@@ -1,10 +1,8 @@
 import { FC, useState } from 'react';
-import { NextPage } from 'next';
 // MUI Components
 import {
     Box,
-    Grid,
-    Typography,
+    Grid
 } from '@mui/material';
 // Mbox
 import Geocoder from '../../components/geocoder';
@@ -34,9 +32,6 @@ const SearchLocation: FC<SearchLocationProps> = (props: SearchLocationProps) => 
         >
             <Grid container spacing={5}>
                 <Grid item xs={12}>
-                    {/* <Typography component="h1" variant="h5" padding={3}>
-                        Start by giving your address
-                    </Typography> */}
                 </Grid>
                 <Grid item xs={12}>
                     <Geocoder
