@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useMemo } from 'react';
 import { Box, CircularProgress, Typography, Grid } from '@mui/material';
 import { NFTCard } from '../../components';
 import { ActionType } from '../../components/nft-card';
@@ -6,7 +6,7 @@ import { StateAlert, StateType } from '../../components/state';
 // Web3
 import { default as useSWRImmutable } from 'swr';
 import { useAccount } from 'wagmi';
-import { fetchListedNFTsBy, fetchRentedNFTsBy, NFTItem } from '../api';
+import { fetchUserNFTs, UserData, NFTItem } from '../api';
 import { QueryType } from '../api/nft/fetchNFT';
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import { contractConfigurations } from '../../hooks/contractConfigurations';
@@ -17,9 +17,20 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
 
     const [tokenID, setTokenID] = useState<BigNumber>();
     const { address } = useAccount();
-    const { data, error, isValidating } = useSWRImmutable<NFTItem[]>(address, async () =>
-        (queryType == QueryType.owned) ? await fetchListedNFTsBy(address) : await fetchRentedNFTsBy(address)
+    const { data, error, isValidating } = useSWRImmutable<UserData>(address, async () =>
+        await fetchUserNFTs(address)
     );
+    const filteredData = useMemo<NFTItem[] | null>(() => {
+        if (data) {
+            if (queryType == QueryType.listed) {
+                return data.listedTokens
+            } else {
+                return data.rentedTokens
+            }
+        } else {
+            return null
+        }
+    }, [data]);
 
     // Web3
     // Unlist an NFT
@@ -87,7 +98,7 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
         );
     }
 
-    if (data.length === 0) {
+    if (filteredData?.length === 0) {
         return (
             <StateAlert state={StateType.empty} />
         );
@@ -95,13 +106,13 @@ export const Vehicles: FC<VehicleProps> = (props: VehicleProps) => {
 
     return (
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-            {data.map((item) => (
+            {filteredData?.map((item) => (
                 item &&
                 <Grid item xs={2} sm={4} md={4} key={item.tokenId}>
                     <NFTCard
                         key={item.tokenId}
                         item={item}
-                        action={queryType == QueryType.owned ? ActionType.unlist : ActionType.none}
+                        action={queryType == QueryType.listed ? ActionType.unlist : ActionType.none}
                         unlistSelectionHandler={async () => {
                             const _tokenID = BigNumber.from(item.tokenId)
                             setTokenID(_tokenID);

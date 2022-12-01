@@ -49,12 +49,12 @@ const IndexPage: NextPage = () => {
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Owned" {...a11yProps(0)} />
+                    <Tab label="Listed" {...a11yProps(0)} />
                     <Tab label="Rented" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <Vehicles queryType={QueryType.owned} />
+                <Vehicles queryType={QueryType.listed} />
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Vehicles queryType={QueryType.rented} />

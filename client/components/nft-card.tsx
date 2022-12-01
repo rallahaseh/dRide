@@ -77,7 +77,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
                 <CardMedia
                     component="img"
                     height="250"
-                    image={`https://nftstorage.link/ipfs/${item.tokenURI}/${item.thumbnail.name}`}
+                    image={`https://nftstorage.link/ipfs/${item.contentURI}/${item.thumbnail.name}`}
                     alt="nft-thumbnail"
                 />
                 <CardContent>
@@ -85,7 +85,7 @@ export const NFTCard: FC<NFTCardProps> = (props: NFTCardProps) => {
                         {item.price + " $/day"}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        {`Available Until: ${toDate?.toDateString()}`}
+                        {(action == ActionType.none ? 'Rented' : 'Available') + ` Until: ${toDate?.toDateString()}`}
                     </Typography>
                 </CardContent>
                 <CardActions>

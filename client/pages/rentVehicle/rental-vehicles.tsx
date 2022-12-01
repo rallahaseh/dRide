@@ -33,8 +33,8 @@ interface RequestParams {
 export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
     const { result } = props;
     const { address } = useAccount();
-    const { data, error, isValidating } = useSWRImmutable<NFTItem[]>(address, async () =>
-        await fetchAvailableNFTs(address)
+    const { data, error, isValidating } = useSWRImmutable<NFTItem[]>({}, async () =>
+        await fetchAvailableNFTs()
     );
     const filteredData = useMemo<NFTItem[] | null>(() => {
         if (result && data) {
