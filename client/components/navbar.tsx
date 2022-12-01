@@ -14,7 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CarRentalIcon from '@mui/icons-material/CarRental';
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useNetwork } from 'wagmi'
+import { useSigner } from 'wagmi'
 
 const pages = [{
   name: 'Rent Vehicle',
@@ -30,11 +30,12 @@ const pages = [{
 export function NavBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [unsupportedChain, setUnsupportedChain] = useState(false);
-  const { chain } = useNetwork()
+  const { data: signer } = useSigner()
 
   useEffect(() => {
-    setUnsupportedChain(chain?.unsupported ?? false)
-  }, [chain])
+    const isDisconnected = signer === null
+    setUnsupportedChain(isDisconnected)
+  }, [signer])
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
