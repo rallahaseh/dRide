@@ -1,4 +1,3 @@
-export { fetchAvailableNFTs, fetchListedNFTsBy, fetchRentedNFTsBy } from './nft/fetchNFT';
-export type { NFTData, NFTItem } from './nft/fetchNFT';
-export { queryClient, queryAvailableNFTs, queryNFTsOwned, queryNFTsRented } from './nft/query';
+export { fetchUserNFTs, fetchAvailableNFTs } from './nft/fetchNFT';
+export type { NFTData, NFTItem, UserData } from './nft/fetchNFT';
 export { getETHPrice } from './fetchPrice';
