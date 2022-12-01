@@ -39,7 +39,7 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
     const filteredData = useMemo<NFTItem[] | null>(() => {
         if (result && data) {
             const filterResult = data.filter((nft) => {
-                let fromDate = result.date.from! <= nft?.date?.from
+                let fromDate = result.date.from! <= nft?.date?.from || result.date.from! <= nft?.date?.to
                 let toDate = result.date.to! <= nft?.date?.to
                 var location = true;
                 if (result.location) {
