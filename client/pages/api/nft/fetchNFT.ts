@@ -60,7 +60,7 @@ export const fetchAvailableNFTs = async (): Promise<NFTItem[]> => {
 };
 
 export type NFTData = {
-  tokenId: number;
+  tokenID: number;
   tokenURI: string;
   contentURI: string;
   metadataURI: string;

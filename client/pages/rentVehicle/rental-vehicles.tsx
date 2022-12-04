@@ -142,9 +142,9 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
             {filteredData?.map((item) => (
                 item &&
-                <Grid item xs={2} sm={4} md={4} key={item.tokenId}>
+                <Grid item xs={2} sm={4} md={4} key={item.tokenID}>
                     <NFTCard
-                        key={item.tokenId}
+                        key={item.tokenID}
                         item={item}
                         action={ActionType.rent}
                         rentSelectionHandler={async () => {
@@ -165,7 +165,7 @@ export const Vehicle: FC<VehicleProps> = (props: VehicleProps) => {
                                 transactionDeadline
                             );
                             setRequestParams({
-                                tokenID: BigNumber.from(item.tokenId),
+                                tokenID: BigNumber.from(item.tokenID),
                                 price: amount,
                                 startDate: BigNumber.from(startDate),
                                 endDate: BigNumber.from(expiryDate),
