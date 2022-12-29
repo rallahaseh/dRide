@@ -1,0 +1,47 @@
+{
+  "name": "dride",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.10.5",
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.13",
+    "@mui/x-date-pickers": "^5.0.8",
+    "@next/font": "^13.0.3",
+    "@rainbow-me/rainbowkit": "^0.7.4",
+    "autosuggest-highlight": "^3.3.4",
+    "eth-permit": "^0.2.3",
+    "ethers": "^5.7.2",
+    "mime": "^3.0.0",
+    "next": "13.0.3",
+    "nft.storage": "^7.0.0",
+    "react": "18.2.0",
+    "react-autosuggest": "^10.1.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.39.3",
+    "swr": "^1.3.0",
+    "urql": "^3.0.3",
+    "use-debounce": "^8.0.4",
+    "wagmi": "^0.7.15"
+  },
+  "devDependencies": {
+    "@types/autosuggest-highlight": "^3.2.0",
+    "@types/mime": "^3.0.1",
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-autosuggest": "^10.1.5",
+    "@types/react-dom": "18.0.8",
+    "eslint": "8.27.0",
+    "eslint-config-next": "13.0.3",
+    "typescript": "4.8.4"
+  }
+}

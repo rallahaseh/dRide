@@ -1,0 +1,19 @@
+type Token @entity {
+  id: ID!
+  tokenID: BigInt!
+  contentURI: String!
+  metadataURI: String!
+  creationDate: BigInt!
+  rentalStartDate: BigInt
+  rentalFinishDate: BigInt
+  creator: User!
+  owner: User
+  renter: User
+}
+
+type User @entity {
+  id: ID!
+  mintedTokens: [Token!] @derivedFrom(field: "creator")
+  listedTokens: [Token!] @derivedFrom(field: "owner")
+  rentedTokens: [Token!] @derivedFrom(field: "renter")
+}
