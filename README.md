@@ -17,15 +17,6 @@ Using a blockchain is one way to make a carsharing business more accessible to u
 
 The results that were obtained show that a smart contract implementation for the carsharing system using the Solidity programming language is capable of reaching the required user security trust when compared to the default software implementation of it. This was demonstrated by the fact that the smart contract implementation used the Solidity programming language. In this investigation, a Decentralized Application (dApp) is used to demonstrate the written smart contract that is stored on the blockchain.
 
-## Demo
-**Add a vehicle**
-
-https://user-images.githubusercontent.com/10099935/209998379-cdf47bf5-debd-4f7c-be8a-d3e202d13a89.mp4
-
-**Rent a vehicle**
-
-https://user-images.githubusercontent.com/10099935/209999101-73c4720f-5891-4666-b16c-cb6962495cac.mp4
-
 ## Resources
 **Requirements**
 - Blockchain
@@ -33,6 +24,7 @@ https://user-images.githubusercontent.com/10099935/209999101-73c4720f-5891-4666-
 - Front-end
     - Typescript [v. 4.8.*](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-8.html)
     - Next.js [v. 13.*.*](https://nextjs.org/)
+    - GraphQL [v. 16.6.*](https://graphql.org/)
 
 **Dependencies**
 - Blockchain
@@ -53,3 +45,24 @@ https://user-images.githubusercontent.com/10099935/209999101-73c4720f-5891-4666-
 - Front-end
     - NFT.Storage [v. 7.0.*](https://nft.storage/docs/)
     - SWR [v. 1.3.*](https://swr.vercel.app/)
+- Graph
+    - Typescript [v. 4.8.*](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-8.html)
+
+# Getting Started
+**System Requirements**
+- [Node.js 14.6.0](https://nodejs.org/en/) or newer
+- MacOS, Windows (including WSL), and Linux are supported
+
+**Setup Project**
+- Navigate to client folder ```cd ./client```
+- Run ```npm run dev``` to start the development server on http://localhost:3000
+- Visit http://localhost:3000 to view your application
+
+## Demo
+**Add a vehicle**
+
+https://user-images.githubusercontent.com/10099935/209998379-cdf47bf5-debd-4f7c-be8a-d3e202d13a89.mp4
+
+**Rent a vehicle**
+
+https://user-images.githubusercontent.com/10099935/209999101-73c4720f-5891-4666-b16c-cb6962495cac.mp4
