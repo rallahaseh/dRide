@@ -49,14 +49,20 @@ The results that were obtained show that a smart contract implementation for the
     - Typescript [v. 4.8.*](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-8.html)
 
 # Getting Started
-**System Requirements**
-- [Node.js 14.6.0](https://nodejs.org/en/) or newer
-- MacOS, Windows (including WSL), and Linux are supported
+**Blockchain**
 
-**Setup Project**
-- Navigate to client folder ```cd ./client```
-- Run ```npm run dev``` to start the development server on http://localhost:3000
-- Visit http://localhost:3000 to view your application
+Contracts have been deployed on the [Goerli Testnet](https://goerli.net/) network.
+- Marketplace contract https://goerli.etherscan.io/address/0x4D95b0Cde53616862fBa18653F1F46c84D687177
+- RentableVehicles contract https://goerli.etherscan.io/address/0xdC03f2784fb00C61fb06d348ec1b75F0B9819609
+
+**Front-end**
+- System Requirements
+    - [Node.js 14.6.0](https://nodejs.org/en/) or newer
+    - MacOS, Windows (including WSL), and Linux are supported
+- Setup Project
+    - Navigate to client folder ```cd ./client```
+    - Run ```npm run dev``` to start the development server on http://localhost:3000
+    - Visit http://localhost:3000 to view your application
 
 ## Demo
 **Add a vehicle**
